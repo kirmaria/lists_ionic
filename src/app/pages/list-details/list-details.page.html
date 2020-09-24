@@ -1,0 +1,39 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{title}}</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <form [formGroup]="listDetailsForm" (ngSubmit)="onSubmit()">
+        <ion-item *ngIf="createMode">
+            <ion-label position="floating">Type</ion-label>
+            <ion-select interface="popover" formControlName="type">
+                <ion-select-option value={{listTypeEnum.checkingList}}>checking list</ion-select-option>
+                <ion-select-option value={{listTypeEnum.shoppingList}}>shopping list</ion-select-option>
+            </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating" >Name</ion-label>
+            <ion-input type="text" formControlName="name" #listNameInput ngbAutoFocus></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Description</ion-label>
+            <ion-textarea rows="5" formControlName="description"></ion-textarea>
+        </ion-item>
+
+        <ion-grid >
+            <ion-row>
+                <ion-col></ion-col>
+                <ion-col>
+                    <ion-buttons>
+                        <ion-button fill="solid" type="submit" [disabled]="!listDetailsForm.valid">OK</ion-button>
+                        <ion-button fill="solid" type="button" (click)="onCancel()">Cancel</ion-button>
+                    </ion-buttons>
+                </ion-col>
+                <ion-col></ion-col>
+            </ion-row>
+        </ion-grid>
+    </form>
+</ion-content>
