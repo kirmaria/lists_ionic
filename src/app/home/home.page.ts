@@ -185,7 +185,8 @@ export class HomePage implements OnInit {
                 componentProps: {
                     list: listToEdit
                 },
-                showBackdrop: false
+                cssClass: 'list-details-class',
+                showBackdrop: true
             });
         modal.onDidDismiss().then((detail: OverlayEventDetail) => {
             this.getLists();

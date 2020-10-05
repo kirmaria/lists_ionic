@@ -1,27 +1,31 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {AfterViewChecked, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ModalController, NavController, NavParams} from '@ionic/angular';
+import {IonInput, ModalController, NavController, NavParams} from '@ionic/angular';
 import {ItemValuesDTO} from '../../dto/itemslist';
-
+import {Keyboard} from '@ionic-native/keyboard/ngx';
 
 @Component({
     selector: 'app-item-details',
     templateUrl: './item-details.page.html',
     styleUrls: ['./item-details.page.scss'],
+    providers: [Keyboard]
 })
-export class ItemDetailsPage implements OnInit {
+export class ItemDetailsPage implements OnInit, AfterViewChecked  {
     title: string;
     itemDetailsForm: FormGroup;
     crtItemValue: ItemValuesDTO;
     createMode: boolean;
     unitTypeEnumKeys: Array<string>;
 
+    @ViewChild('itemLabelInput') itemLabelInputElt: IonInput;
+
 
     constructor(public navCtrl: NavController,
                 public navParams: NavParams,
                 private formBuilder: FormBuilder,
                 private modalCtrl: ModalController,
-                @Inject('unitTypeEnum') public unitTypeEnum) {
+                @Inject('unitTypeEnum') public unitTypeEnum,
+                private keyboard: Keyboard) {
 
         this.unitTypeEnumKeys = Object.keys(unitTypeEnum);
 
@@ -44,6 +48,11 @@ export class ItemDetailsPage implements OnInit {
 
 
     ngOnInit() {
+    }
+
+    public ngAfterViewChecked(): void {
+        // focus on name input
+        this.itemLabelInputElt.setFocus();
     }
 
     ionViewDidLoad() {

@@ -18,9 +18,9 @@ export class ListDetailsPage implements OnInit, AfterViewChecked {
     createMode: boolean;
 
 
-    // @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
-    @ViewChild('listNameInput') listNameInputElt: IonInput;
-    needsFocus: boolean;
+    @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
+    initialFocus: boolean;
+    ionViewWillEntered: boolean;
 
 
     constructor(public navCtrl: NavController,
@@ -45,38 +45,50 @@ export class ListDetailsPage implements OnInit, AfterViewChecked {
             this.title = 'Update list:';
         }
 
-        this.needsFocus = false;
+        this.initialFocus = true;
+        this.ionViewWillEntered = false;
+
     }
 
 
     ngOnInit() {
-    }
 
-    ionViewDidEnter() {
-        console.log('ionViewDidEnter ListDetailsPage');
-        // setTimeout(() => {
-        //     this.listNameInputElt.setFocus();
-        // }, 400);
-        this.needsFocus = true;
     }
-
-    // ionViewWillEnter() {
-    //     console.log('ionViewWillEnter ListDetailsPage');
-    //     setTimeout(() => {
-    //         this.listNameInputElt.setFocus();
-    //     }, 400);
-    // }
 
 
     public ngAfterViewChecked(): void {
-        // if (this.needsFocus) {
-        this.needsFocus = false;
-        console.log('setFocus');
-        setTimeout(() => {
+
+        console.log('ngAfterViewChecked');
+        console.log(this.initialFocus);
+        console.log(this.ionViewWillEntered);
+
+        // focus on name input
+        if (this.initialFocus && this.ionViewWillEntered) {
             this.listNameInputElt.setFocus();
-            // this.keyboard.show();
-        }, 400);
-        // }
+            this.initialFocus = false;
+        }
+
+
+    }
+
+    public ngAfterViewInit(): void {
+
+        console.log('ngAfterViewChecked');
+        console.log(this.initialFocus);
+        console.log(this.ionViewWillEntered);
+
+        // focus on name input
+        if (this.initialFocus && this.ionViewWillEntered) {
+            this.listNameInputElt.setFocus();
+            this.initialFocus = false;
+        }
+
+
+    }
+
+    public ionViewDidEnter() {
+        this.ionViewWillEntered = true;
+        console.log('ionViewWillEnter');
     }
 
     onSubmit() {
