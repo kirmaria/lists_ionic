@@ -10,7 +10,8 @@ export enum UnitType {
     pcs = 'pcs'
 }
 
-export enum ActionMode {
+export enum EditPropListType {
+    none,
     create,
     update,
     duplicate

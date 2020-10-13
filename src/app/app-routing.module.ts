@@ -7,6 +7,14 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
   {
+    path: 'auth/callback',
+    loadChildren: './pages/auth/auth-callback/auth-callback.module#AuthCallbackPageModule'
+  },
+  {
+    path: 'auth/endsession',
+    loadChildren: './pages/auth/end-session/end-session.module#EndSessionPageModule'
+  },
+  {
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

@@ -1,10 +1,19 @@
-import {Component, OnInit, Inject} from '@angular/core';
-import {ItemsListDTO, ItemsListValuesDTO, ListType} from '../dto/itemslist';
+import {Component, OnInit, Inject, OnDestroy, ViewChild} from '@angular/core';
+import {ItemsListDTO, EditPropListType} from '../dto/itemslist';
 import {ItemsListService} from '../services/itemslist.service';
-import {AlertController, IonItemSliding, LoadingController, ModalController, ToastController, AnimationBuilder} from '@ionic/angular';
-import {ListDetailsPage} from '../pages/list-details/list-details.page';
+import {
+    AlertController,
+    IonItemSliding,
+    LoadingController,
+    ModalController,
+    ToastController,
+    IonInput
+} from '@ionic/angular';
+
 import {OverlayEventDetail} from '@ionic/core';
 import {ListItemsPage} from '../pages/list-items/list-items.page';
+import {IAuthAction, AuthActions, AuthObserver, AuthService} from 'ionic-appauth';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 
 @Component({
@@ -12,13 +21,21 @@ import {ListItemsPage} from '../pages/list-items/list-items.page';
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, OnDestroy {
 
     title: string;
-
     lists: ItemsListDTO[];
     errMsg: string;
 
+
+    authAction: IAuthAction;
+    authSignInObserver: AuthObserver;
+    authSignOutObserver: AuthObserver;
+
+    @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
+    crtList: ItemsListDTO;
+    editPropListType: EditPropListType;
+    listDetailsForm: FormGroup;
 
     constructor(
         private listService: ItemsListService,
@@ -26,14 +43,94 @@ export class HomePage implements OnInit {
         public toastCtrl: ToastController,
         public loadingCtrl: LoadingController,
         public alertCtrl: AlertController,
-        @Inject('BaseURL') public baseURL,
-        @Inject('listTypeEnum') public listTypeEnum) {
+        @Inject('listTypeEnum') public listTypeEnum,
+        @Inject('editPropListTypeEnum') public editPropListTypeEnum,
+        private authService: AuthService,
+        private formBuilder: FormBuilder) {
+
         this.title = 'My lists';
+
+        this.editPropListType = this.editPropListTypeEnum.none;
+        this.crtList = new ItemsListDTO();
+        this.initListDetailsForm();
+    }
+
+    private initListDetailsForm(){
+        this.listDetailsForm = this.formBuilder.group({
+            name: [this.crtList.value.name, Validators.required],
+            description: [this.crtList.value.description],
+            type: [this.crtList.value.type, Validators.required]
+        });
     }
 
     ngOnInit(): void {
         this.getLists();
+
+        this.authService.loadTokenFromStorage();
+        this.authSignInObserver = this.authService.addActionListener((action) => this.onSignInSuccess(action));
+        this.authSignOutObserver = this.authService.addActionListener((action) => this.onSignOutSuccess(action));
+
     }
+
+    ngOnDestroy(): void {
+        this.authService.removeActionObserver(this.authSignInObserver);
+        this.authService.removeActionObserver(this.authSignOutObserver);
+    }
+
+
+    private onSubmitPropertyList(): void {
+
+        switch (this.editPropListType) {
+            case this.editPropListTypeEnum.create: {
+                this.listService.addList(this.listDetailsForm.value)
+                    .subscribe(
+                        list => {
+                            this.getLists();
+                        },
+                        errMsg => {
+                            this.errMsg = errMsg;
+                            console.log('addlist ERROR: ' + errMsg);
+                        });
+                break;
+            }
+            case this.editPropListTypeEnum.update: {
+                this.listService.updateList(this.crtList, this.listDetailsForm.value)
+                    .subscribe(
+                        list => {
+                            this.getLists();
+                        },
+                        errMsg => {
+                            this.errMsg = errMsg;
+                            console.log('updateList ERROR: ' + errMsg);
+                        });
+                break;
+            }
+            case this.editPropListTypeEnum.duplicate: {
+                this.listService.duplicateList(this.crtList, this.listDetailsForm.value)
+                    .subscribe(
+                        list => {
+                            this.getLists();
+                        },
+                        errMsg => {
+                            this.errMsg = errMsg;
+                            console.log('duplicateList ERROR: ' + errMsg);
+                        });
+                break;
+            }
+        }
+
+        this.editPropListType = this.editPropListTypeEnum.none;
+
+    }
+
+    private onCancelPropertyList(): void {
+        this.editPropListType = this.editPropListTypeEnum.none;
+    }
+
+
+    //
+    // lists management
+    //
 
     getLists() {
         this.listService.getLists()
@@ -43,90 +140,25 @@ export class HomePage implements OnInit {
     }
 
     async createList() {
-        const modal: HTMLIonModalElement =
-            await this.modalController.create({
-                component: ListDetailsPage,
-                componentProps: {
-                    createMode: true,
-                    crtListValue: new ItemsListValuesDTO()
-                }
-            });
-        modal.onDidDismiss().then((detail: OverlayEventDetail) => {
-            if ((detail !== null) && (typeof detail.data !== 'undefined') && (typeof detail.data.value !== 'undefined')) {
-                this.listService.addList(detail.data.value)
-                    .subscribe(
-                        list => {
-                            this.getLists();
-                        },
-                        errMsg => {
-                            this.errMsg = errMsg;
-                            console.log('addlist ERROR: ' + errMsg);
-                        });
-            }
-        });
-        await modal.present();
+        this.editPropListType = this.editPropListTypeEnum.create;
+        this.crtList = new ItemsListDTO();
+        this.initListDetailsForm();
+        setTimeout(() => this.listNameInputElt.setFocus(), 100);
     }
 
-    async updateInfoList(listToUpdate: ItemsListDTO, sldListItem: IonItemSliding) {
-
-        const idx = this.lists.indexOf(listToUpdate);
-
-        const modal: HTMLIonModalElement =
-            await this.modalController.create({
-                component: ListDetailsPage,
-                componentProps: {
-                    createMode: false,
-                    crtListValue: listToUpdate.value
-                }
-            });
-        modal.onDidDismiss().then((detail: OverlayEventDetail) => {
-            if ((detail !== null) && (typeof detail.data !== 'undefined') && (typeof detail.data.value !== 'undefined')) {
-
-                this.listService.updateList(listToUpdate, detail.data.value)
-                    .subscribe(
-                        list => {
-                            this.getLists();
-                        },
-                        errMsg => {
-                            this.errMsg = errMsg;
-                            console.log('updateList ERROR: ' + errMsg);
-                        });
-            }
-        });
-        await modal.present();
-        sldListItem.close();
+    async updateInfoList(listToUpdate: ItemsListDTO) {
+        this.editPropListType = this.editPropListTypeEnum.update;
+        this.crtList = listToUpdate;
+        this.initListDetailsForm();
+        setTimeout(() => this.listNameInputElt.setFocus(), 100);
     }
 
 
-    async duplicateList(listToDuplicate: ItemsListDTO, sldListItem: IonItemSliding) {
-
-        const idx = this.lists.indexOf(listToDuplicate);
-
-        const modal: HTMLIonModalElement =
-            await this.modalController.create({
-
-                component: ListDetailsPage,
-                componentProps: {
-                    createMode: false,
-                    crtListValue: listToDuplicate.value
-                }
-            });
-        modal.onDidDismiss().then((detail: OverlayEventDetail) => {
-            if ((detail !== null) && (typeof detail.data !== 'undefined') && (typeof detail.data.value !== 'undefined')) {
-
-                this.listService.duplicateList(listToDuplicate, detail.data.value)
-                    .subscribe(
-                        list => {
-                            this.getLists();
-                        },
-                        errMsg => {
-                            this.errMsg = errMsg;
-                            console.log('duplicateList ERROR: ' + errMsg);
-                        });
-            }
-        });
-        await modal.present();
-        sldListItem.close();
+    async duplicateList(listToDuplicate: ItemsListDTO) {
+        this.editPropListType = this.editPropListTypeEnum.duplicate;
+        this.crtList = listToDuplicate;
+        this.initListDetailsForm();
+        setTimeout(() => this.listNameInputElt.setFocus(), 100);
     }
 
 
@@ -195,4 +227,43 @@ export class HomePage implements OnInit {
     }
 
 
+    //
+    // auth SignIn
+    //
+
+    private onSignInSuccess(action: IAuthAction) {
+        console.log('onSignInSuccess');
+        console.log(action);
+
+        this.authAction = action;
+        if (action.action === AuthActions.SignInSuccess ||
+            action.action === AuthActions.LoadTokenFromStorageSuccess) {
+
+            console.log('onSignInSuccess / ' + action.action);
+
+            console.log(action.tokenResponse.idToken);
+            sessionStorage.setItem('idtoken', action.tokenResponse.idToken);
+
+        }
+    }
+
+    public signIn() {
+        this.authService.signIn();
+    }
+
+
+    private onSignOutSuccess(action: IAuthAction) {
+
+
+        console.log('onSignOutSuccess');
+        console.log(action);
+
+        if (action.action === AuthActions.SignOutSuccess) {
+            console.log('onSignOutSuccess / ' + action.action);
+        }
+    }
+
+    public signOut() {
+        this.authService.signOut();
+    }
 }

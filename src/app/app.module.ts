@@ -12,10 +12,10 @@ import {AppRoutingModule} from './app-routing.module';
 import {baseURL} from './shared/baseurl';
 
 import {HttpClientModule} from '@angular/common/http';
-import {ListType} from './dto/itemslist';
-import {UnitType} from './dto/itemslist';
+import {ListType, UnitType, EditPropListType} from './dto/itemslist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-// import {iosTransitionAnimation} from '@ionic/core/dist/collection/utils/transition/ios.transition';
+
+import { CoreModule } from './core/core.module';
 
 
 @NgModule({
@@ -27,12 +27,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     imports: [
         BrowserModule,
         IonicModule.forRoot({
-            // navAnimation: iosTransitionAnimation
         }),
         AppRoutingModule,
         HttpClientModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+        CoreModule
     ],
     providers: [
         StatusBar,
@@ -40,7 +40,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
         {provide: 'BaseURL', useValue: baseURL},
         {provide: 'listTypeEnum', useValue: ListType},
-        {provide: 'unitTypeEnum', useValue: UnitType}
+        {provide: 'unitTypeEnum', useValue: UnitType},
+        {provide: 'editPropListTypeEnum', useValue: EditPropListType},
     ],
     bootstrap: [AppComponent]
 })

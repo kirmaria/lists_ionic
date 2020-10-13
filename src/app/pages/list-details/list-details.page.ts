@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IonInput, ModalController, NavController, NavParams} from '@ionic/angular';
 import {ItemsListValuesDTO} from '../../dto/itemslist';
@@ -11,7 +11,7 @@ import {Keyboard} from '@ionic-native/keyboard/ngx';
     styleUrls: ['./list-details.page.scss'],
     providers: [Keyboard]
 })
-export class ListDetailsPage implements OnInit, AfterViewChecked {
+export class ListDetailsPage implements OnInit, AfterViewChecked, AfterViewInit {
     title: string;
     listDetailsForm: FormGroup;
     crtListValue: ItemsListValuesDTO;
@@ -19,6 +19,7 @@ export class ListDetailsPage implements OnInit, AfterViewChecked {
 
 
     @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
+    // @ViewChild('listNameInput', {static: true}) listNameInputElt: ElementRef;
     initialFocus: boolean;
     ionViewWillEntered: boolean;
 
@@ -52,36 +53,44 @@ export class ListDetailsPage implements OnInit, AfterViewChecked {
 
 
     ngOnInit() {
-
+        this.initialFocus = true;
     }
 
 
     public ngAfterViewChecked(): void {
+
+        if (this.initialFocus ) {
+            this.initialFocus = false;
+            this.listNameInputElt.setFocus();
+        }
+
+
 
         console.log('ngAfterViewChecked');
         console.log(this.initialFocus);
         console.log(this.ionViewWillEntered);
 
         // focus on name input
-        if (this.initialFocus && this.ionViewWillEntered) {
-            this.listNameInputElt.setFocus();
-            this.initialFocus = false;
-        }
+        //if (this.initialFocus && this.ionViewWillEntered) {
+        //this.listNameInputElt.nativeElement.setFocus();
+        //this.initialFocus = false;
+        //}
 
 
     }
 
     public ngAfterViewInit(): void {
 
-        console.log('ngAfterViewChecked');
-        console.log(this.initialFocus);
-        console.log(this.ionViewWillEntered);
 
-        // focus on name input
-        if (this.initialFocus && this.ionViewWillEntered) {
-            this.listNameInputElt.setFocus();
-            this.initialFocus = false;
-        }
+        // console.log('ngAfterViewChecked');
+        // console.log(this.initialFocus);
+        // console.log(this.ionViewWillEntered);
+        //
+        // // focus on name input
+        // if (this.initialFocus && this.ionViewWillEntered) {
+        //     this.listNameInputElt.nativeElement.setFocus();
+        //     this.initialFocus = false;
+        // }
 
 
     }
