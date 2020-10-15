@@ -10,7 +10,7 @@ export enum UnitType {
     pcs = 'pcs'
 }
 
-export enum EditPropListType {
+export enum EditPropertiesType {
     none,
     create,
     update,

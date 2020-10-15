@@ -1,79 +1,125 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>{{title}}</ion-title>
-    <ion-buttons slot="start">
-      <button ion-button  size="small" (click)="this.onExit()">
-        <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
-      </button>
-    </ion-buttons>
-
-
-    <ion-buttons slot="end">
-      <button ion-button  size="small" (click)="createItem()">
-        <ion-icon name="add" slot="icon-only"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>{{title}}</ion-title>
+        <ion-buttons slot="start">
+            <button ion-button size="small" (click)="this.onExit()">
+                <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div>
-    <ion-list>
+    <ion-card *ngIf="editPropType !== editPropTypeEnum.none">
+        <ion-card-content>
+            <form [formGroup]="itemDetailsForm" (ngSubmit)="onSubmitPropertyList()">
 
-      <ion-item-sliding *ngFor="let item of list.items" text-wrap #sld_item>
-        <ion-item button>
+                <ion-item>
+                    <ion-label position="floating">Label</ion-label>
+                    <ion-input type="text" formControlName="label" #itemLabelInput></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Quantity</ion-label>
+                    <ion-input type="number" formControlName="quantity" min="1" inputmode="numeric"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Unit</ion-label>
+                    <ion-select interface="popover" formControlName="unit" >
+                        <ion-select-option *ngFor="let key of unitTypeEnumKeys" value={{key}}>{{unitTypeEnum[key]}}</ion-select-option>
+                    </ion-select>
 
-          <ion-grid class="ion-no-padding ion-no-margin">
-            <ion-row align-items="center" class="ion-no-padding ion-no-margin">
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Description</ion-label>
+                    <ion-textarea rows="3" formControlName="description"></ion-textarea>
+                </ion-item>
 
-              <ion-col size="3" (click)="checkItem(item)" class="ion-no-padding ion-no-margin">
-                <ion-checkbox checked={{item.value.checked}}></ion-checkbox>
-              </ion-col>
+                <ion-grid >
+                    <ion-row>
+                        <ion-col></ion-col>
+                        <ion-col>
+                            <ion-buttons>
+                                <ion-button fill="solid" type="submit" [disabled]="!itemDetailsForm.valid">OK</ion-button>
+                                <ion-button fill="solid" type="button" (click)="onCancelPropertyList()">Cancel</ion-button>
+                            </ion-buttons>
+                        </ion-col>
+                        <ion-col></ion-col>
+                    </ion-row>
+                </ion-grid>
+            </form>
+        </ion-card-content>
+    </ion-card>
 
-              <ion-col size="5">
-                <ion-label class="ion-text-wrap">
-                  <ion-text>
-                    <h3>{{item.value.label}}</h3>
-                    <h4>{{item.value.description}}</h4>
-                  </ion-text>
-                </ion-label>
-              </ion-col>
+    <div *ngIf="editPropType === editPropTypeEnum.none">
 
-              <ion-col size="2">
+            <ion-toolbar>
+                <ion-buttons>
+                    <button ion-button size="small" (click)="createItem()">
+                        <ion-icon name="add" slot="icon-only"></ion-icon>
+                    </button>
+                </ion-buttons>
+            </ion-toolbar>
 
-                <ion-label >
-                  <ion-text>
-                    <h3>{{item.value.quantity}}</h3>
-                  </ion-text>
-                </ion-label>
-              </ion-col>
+            <ion-list>
+                <ion-item-sliding *ngFor="let item of list.items" text-wrap #sld_item>
+                    <ion-item button>
 
-              <ion-col size="2">
-                <ion-label class="ion-text-wrap">
-                  <ion-text>
-                    <h3>{{item.value.unit}}</h3>
-                  </ion-text>
-                </ion-label>
-              </ion-col>
+                        <ion-grid class="ion-no-padding ion-no-margin">
+                            <ion-row align-items="left" class="ion-no-padding ion-no-margin">
 
-            </ion-row>
-          </ion-grid>
+                                <ion-col size="3" (click)="checkItem(item)" class="ion-no-padding ion-no-margin">
+                                    <ion-checkbox checked={{item.value.checked}}></ion-checkbox>
+                                </ion-col>
 
-        </ion-item>
+                                <ion-col size="7">
+                                    <ion-label class="ion-text-wrap">
+                                        <ion-text>
+                                            <h3>{{item.value.label}}</h3>
+                                            <h4>{{item.value.description}}</h4>
+                                        </ion-text>
+                                    </ion-label>
+                                </ion-col>
 
-        <ion-item-options side="end">
-          <ion-button size="small" (click)="updateItem(item, sld_item)">
-            <ion-icon name="pencil-outline"></ion-icon>
-          </ion-button>
-        </ion-item-options>
-        <ion-item-options side="start">
-          <ion-button size="small" color="danger" (click)="removeItem(item, sld_item)">
-            <ion-icon name="trash"></ion-icon>
-          </ion-button>
-        </ion-item-options>
+                                <ion-col size="2">
 
-      </ion-item-sliding>
+                                    <ion-label>
+                                        <ion-text>
+                                            <h3>{{item.value.quantity}} {{item.value.unit}}</h3>
+                                        </ion-text>
+                                    </ion-label>
+                                </ion-col>
 
-    </ion-list>
-  </div>
+<!--                                <ion-col size="2">-->
+<!--                                    <ion-label class="ion-text-wrap">-->
+<!--                                        <ion-text>-->
+<!--                                            <h3>{{item.value.unit}}</h3>-->
+<!--                                        </ion-text>-->
+<!--                                    </ion-label>-->
+<!--                                </ion-col>-->
+
+                            </ion-row>
+                        </ion-grid>
+
+                    </ion-item>
+
+                    <ion-item-options side="start">
+                        <ion-button size="small" color="danger" (click)="removeItem(item, sld_item)">
+                            <ion-icon name="trash"></ion-icon>
+                        </ion-button>
+                    </ion-item-options>
+                    <ion-item-options side="end">
+                        <ion-button size="small" (click)="updateItem(item, sld_item)">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button size="small" (click)="duplicateItem(item)">
+                            <ion-icon slot="icon-only" name="duplicate"></ion-icon>
+                        </ion-button>
+                    </ion-item-options>
+
+                </ion-item-sliding>
+
+            </ion-list>
+
+    </div>
+
 </ion-content>

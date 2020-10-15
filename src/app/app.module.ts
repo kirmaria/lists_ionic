@@ -12,7 +12,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {baseURL} from './shared/baseurl';
 
 import {HttpClientModule} from '@angular/common/http';
-import {ListType, UnitType, EditPropListType} from './dto/itemslist';
+import {ListType, UnitType, EditPropertiesType} from './dto/itemslist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { CoreModule } from './core/core.module';
@@ -41,7 +41,7 @@ import { CoreModule } from './core/core.module';
         {provide: 'BaseURL', useValue: baseURL},
         {provide: 'listTypeEnum', useValue: ListType},
         {provide: 'unitTypeEnum', useValue: UnitType},
-        {provide: 'editPropListTypeEnum', useValue: EditPropListType},
+        {provide: 'editPropTypeEnum', useValue: EditPropertiesType},
     ],
     bootstrap: [AppComponent]
 })

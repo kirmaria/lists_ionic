@@ -4,7 +4,7 @@ import {ItemDTO, ItemsListDTO, ItemsListValuesDTO, ItemValuesDTO} from '../dto/i
 import {API_ITEMS_LIST_URL, API_ITEM_URL} from '../shared/baseurl';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ProcessHttpMsgService} from './process-http-msg.service';
-import { catchError} from 'rxjs/operators';
+import {catchError} from 'rxjs/operators';
 
 
 @Injectable({
@@ -28,7 +28,7 @@ export class ItemsListService {
 
     duplicateList(listToDuplicate: ItemsListDTO, val: ItemsListValuesDTO): Observable<ItemsListDTO> {
         const param = new HttpParams().set('listId', listToDuplicate.id);
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL , val, {params: param})
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL, val, {params: param})
             .pipe(catchError(this.processHttpMsgService.handleError));
     }
 
@@ -50,6 +50,12 @@ export class ItemsListService {
 
     updateItem(item: ItemDTO, val: ItemValuesDTO): Observable<ItemsListDTO> {
         return this.http.put<ItemsListDTO>(API_ITEM_URL + '/' + item.id, val)
+            .pipe(catchError(this.processHttpMsgService.handleError));
+    }
+
+    duplicateItem(itemToDuplicate: ItemDTO, list: ItemsListDTO): Observable<ItemsListDTO> {
+        const param = new HttpParams().set('itemId', itemToDuplicate.id);
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', null, {params: param})
             .pipe(catchError(this.processHttpMsgService.handleError));
     }
 

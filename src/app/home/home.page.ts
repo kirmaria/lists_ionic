@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject, OnDestroy, ViewChild} from '@angular/core';
-import {ItemsListDTO, EditPropListType} from '../dto/itemslist';
+import {ItemsListDTO, EditPropertiesType} from '../dto/itemslist';
 import {ItemsListService} from '../services/itemslist.service';
 import {
     AlertController,
@@ -14,12 +14,14 @@ import {OverlayEventDetail} from '@ionic/core';
 import {ListItemsPage} from '../pages/list-items/list-items.page';
 import {IAuthAction, AuthActions, AuthObserver, AuthService} from 'ionic-appauth';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Keyboard} from '@ionic-native/keyboard/ngx';
 
 
 @Component({
     selector: 'app-home',
     templateUrl: 'home.page.html',
     styleUrls: ['home.page.scss'],
+    providers: [Keyboard]
 })
 export class HomePage implements OnInit, OnDestroy {
 
@@ -34,7 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
 
     @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
     crtList: ItemsListDTO;
-    editPropListType: EditPropListType;
+    editPropType: EditPropertiesType;
     listDetailsForm: FormGroup;
 
     constructor(
@@ -44,13 +46,14 @@ export class HomePage implements OnInit, OnDestroy {
         public loadingCtrl: LoadingController,
         public alertCtrl: AlertController,
         @Inject('listTypeEnum') public listTypeEnum,
-        @Inject('editPropListTypeEnum') public editPropListTypeEnum,
+        @Inject('editPropTypeEnum') public editPropTypeEnum,
         private authService: AuthService,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        private keyboard: Keyboard) {
 
         this.title = 'My lists';
 
-        this.editPropListType = this.editPropListTypeEnum.none;
+        this.editPropType = this.editPropTypeEnum.none;
         this.crtList = new ItemsListDTO();
         this.initListDetailsForm();
     }
@@ -80,8 +83,8 @@ export class HomePage implements OnInit, OnDestroy {
 
     private onSubmitPropertyList(): void {
 
-        switch (this.editPropListType) {
-            case this.editPropListTypeEnum.create: {
+        switch (this.editPropType) {
+            case this.editPropTypeEnum.create: {
                 this.listService.addList(this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -93,7 +96,7 @@ export class HomePage implements OnInit, OnDestroy {
                         });
                 break;
             }
-            case this.editPropListTypeEnum.update: {
+            case this.editPropTypeEnum.update: {
                 this.listService.updateList(this.crtList, this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -105,7 +108,7 @@ export class HomePage implements OnInit, OnDestroy {
                         });
                 break;
             }
-            case this.editPropListTypeEnum.duplicate: {
+            case this.editPropTypeEnum.duplicate: {
                 this.listService.duplicateList(this.crtList, this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -119,12 +122,12 @@ export class HomePage implements OnInit, OnDestroy {
             }
         }
 
-        this.editPropListType = this.editPropListTypeEnum.none;
+        this.editPropType = this.editPropTypeEnum.none;
 
     }
 
     private onCancelPropertyList(): void {
-        this.editPropListType = this.editPropListTypeEnum.none;
+        this.editPropType = this.editPropTypeEnum.none;
     }
 
 
@@ -140,14 +143,14 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     async createList() {
-        this.editPropListType = this.editPropListTypeEnum.create;
+        this.editPropType = this.editPropTypeEnum.create;
         this.crtList = new ItemsListDTO();
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
     }
 
     async updateInfoList(listToUpdate: ItemsListDTO) {
-        this.editPropListType = this.editPropListTypeEnum.update;
+        this.editPropType = this.editPropTypeEnum.update;
         this.crtList = listToUpdate;
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
@@ -155,7 +158,7 @@ export class HomePage implements OnInit, OnDestroy {
 
 
     async duplicateList(listToDuplicate: ItemsListDTO) {
-        this.editPropListType = this.editPropListTypeEnum.duplicate;
+        this.editPropType = this.editPropTypeEnum.duplicate;
         this.crtList = listToDuplicate;
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
