@@ -1,39 +1,27 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavController } from '@ionic/angular';
-import { Router } from '@angular/router';
-import { AuthActions, IAuthAction, AuthObserver, AuthService } from 'ionic-appauth';
+import {Component, OnInit} from '@angular/core';
+import {NavController} from '@ionic/angular';
+import {Router} from '@angular/router';
+import {Auth0Service} from '../../../services/auth0.service';
+
+
 
 @Component({
     template: '<p>Signing in...</p>'
 })
-export class AuthCallbackPage implements OnInit, OnDestroy {
-    observer: AuthObserver;
+export class AuthCallbackPage implements OnInit {
 
     constructor(
-        private auth: AuthService,
+        private authService: Auth0Service,
         private navCtrl: NavController,
         private router: Router
-    ) { }
+    ) {
+        console.log('AuthCallbackPage');
+        console.log(this.authService);
+    }
 
     ngOnInit() {
-        this.observer = this.auth.addActionListener((action) => this.postCallback(action));
-        this.auth.authorizationCallback(window.location.origin + this.router.url);
+        console.log('AuthCallbackPage ngOnInit');
+        console.log(this.authService);
+        this.authService.handleRedirectCallback();
     }
-
-    ngOnDestroy() {
-        this.auth.removeActionObserver(this.observer);
-    }
-
-    postCallback(action: IAuthAction) {
-        if (action.action === AuthActions.SignInSuccess) {
-             this.navCtrl.navigateRoot('home');
-            console.log('SignIn success!');
-        }
-
-        if (action.action === AuthActions.SignInFailed) {
-           this.navCtrl.navigateRoot('landing');
-            console.log('SignIn failed!');
-        }
-    }
-
 }

@@ -4,28 +4,33 @@
 
 export const environment = {
     production: false,
+    // auth_config: {
+    //     client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
+    //     server_host: 'https://dev-pjs46xuy.eu.auth0.com',
+    //     redirect_url: 'http://localhost:8100',
+    //     end_session_redirect_url: 'http://localhost:8100',
+    //     scopes: 'openid offline_access',
+    //     pkce: true,
+    //     metadata: {
+    //         issuer: 'https://dev-pjs46xuy.eu.auth0.com',
+    //         authorization_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/authorize',
+    //         userinfo_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/userinfo',
+    //         end_session_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/v2/logout',
+    //         jwks_uri: 'https://dev-pjs46xuy.eu.auth0.com/.well-known/jwks.json',
+    //     }
+    // },
+    // auth_config_native: {
+    //     client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
+    //     server_host: 'https://dev-pjs46xuy.eu.auth0.com',
+    //     redirect_url: 'com.appauth.demo://callback',
+    //     end_session_redirect_url: 'com.appauth.demo://endsession',
+    //     scopes: 'openid offline_access',
+    //     pkce: true
+    // }
     auth_config: {
+        domain: 'dev-pjs46xuy.eu.auth0.com',
         client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
-        server_host: 'https://dev-pjs46xuy.eu.auth0.com',
-        redirect_url: 'http://localhost:8100',
-        end_session_redirect_url: 'http://localhost:8100',
-        scopes: 'openid offline_access',
-        pkce: true,
-        metadata: {
-            issuer: 'https://dev-pjs46xuy.eu.auth0.com',
-            authorization_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/authorize',
-            userinfo_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/userinfo',
-            end_session_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/v2/logout',
-            jwks_uri: 'https://dev-pjs46xuy.eu.auth0.com/.well-known/jwks.json',
-        }
-    },
-    auth_config_native: {
-        client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
-        server_host: 'https://dev-pjs46xuy.eu.auth0.com',
-        redirect_url: 'com.appauth.demo://callback',
-        end_session_redirect_url: 'com.appauth.demo://endsession',
-        scopes: 'openid offline_access',
-        pkce: true
+        redirect_uri: 'http://localhost:8100/auth/callback'
     }
 };
 

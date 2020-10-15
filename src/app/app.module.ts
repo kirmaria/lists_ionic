@@ -15,8 +15,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {ListType, UnitType, EditPropertiesType} from './dto/itemslist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
-import { CoreModule } from './core/core.module';
-
 
 @NgModule({
     declarations: [
@@ -31,8 +29,7 @@ import { CoreModule } from './core/core.module';
         AppRoutingModule,
         HttpClientModule,
         ReactiveFormsModule,
-        FormsModule,
-        CoreModule
+        FormsModule
     ],
     providers: [
         StatusBar,

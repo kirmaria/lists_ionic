@@ -12,9 +12,11 @@ import {
 
 import {OverlayEventDetail} from '@ionic/core';
 import {ListItemsPage} from '../pages/list-items/list-items.page';
-import {IAuthAction, AuthActions, AuthObserver, AuthService} from 'ionic-appauth';
+
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
+import {Auth0Service} from '../services/auth0.service';
+
 
 
 @Component({
@@ -29,15 +31,11 @@ export class HomePage implements OnInit, OnDestroy {
     lists: ItemsListDTO[];
     errMsg: string;
 
-
-    authAction: IAuthAction;
-    authSignInObserver: AuthObserver;
-    authSignOutObserver: AuthObserver;
-
     @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
     crtList: ItemsListDTO;
     editPropType: EditPropertiesType;
     listDetailsForm: FormGroup;
+
 
     constructor(
         private listService: ItemsListService,
@@ -47,9 +45,9 @@ export class HomePage implements OnInit, OnDestroy {
         public alertCtrl: AlertController,
         @Inject('listTypeEnum') public listTypeEnum,
         @Inject('editPropTypeEnum') public editPropTypeEnum,
-        private authService: AuthService,
         private formBuilder: FormBuilder,
-        private keyboard: Keyboard) {
+        private keyboard: Keyboard,
+        private authService: Auth0Service) {
 
         this.title = 'My lists';
 
@@ -58,7 +56,11 @@ export class HomePage implements OnInit, OnDestroy {
         this.initListDetailsForm();
     }
 
-    private initListDetailsForm(){
+    logIn(){
+        this.authService.login();
+    }
+
+    private initListDetailsForm() {
         this.listDetailsForm = this.formBuilder.group({
             name: [this.crtList.value.name, Validators.required],
             description: [this.crtList.value.description],
@@ -69,15 +71,9 @@ export class HomePage implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.getLists();
 
-        this.authService.loadTokenFromStorage();
-        this.authSignInObserver = this.authService.addActionListener((action) => this.onSignInSuccess(action));
-        this.authSignOutObserver = this.authService.addActionListener((action) => this.onSignOutSuccess(action));
-
     }
 
     ngOnDestroy(): void {
-        this.authService.removeActionObserver(this.authSignInObserver);
-        this.authService.removeActionObserver(this.authSignOutObserver);
     }
 
 
@@ -230,43 +226,4 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    //
-    // auth SignIn
-    //
-
-    private onSignInSuccess(action: IAuthAction) {
-        console.log('onSignInSuccess');
-        console.log(action);
-
-        this.authAction = action;
-        if (action.action === AuthActions.SignInSuccess ||
-            action.action === AuthActions.LoadTokenFromStorageSuccess) {
-
-            console.log('onSignInSuccess / ' + action.action);
-
-            console.log(action.tokenResponse.idToken);
-            sessionStorage.setItem('idtoken', action.tokenResponse.idToken);
-
-        }
-    }
-
-    public signIn() {
-        this.authService.signIn();
-    }
-
-
-    private onSignOutSuccess(action: IAuthAction) {
-
-
-        console.log('onSignOutSuccess');
-        console.log(action);
-
-        if (action.action === AuthActions.SignOutSuccess) {
-            console.log('onSignOutSuccess / ' + action.action);
-        }
-    }
-
-    public signOut() {
-        this.authService.signOut();
-    }
 }
