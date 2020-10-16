@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
-//import { AuthService } from 'ionic-appauth';
 import { Router } from '@angular/router';
+import {Auth0Service} from '../../../services/auth0.service';
 
 @Component({
     template: '<p>Signing Out...</p>'
@@ -9,17 +9,15 @@ import { Router } from '@angular/router';
 export class EndSessionPage implements OnInit {
 
     constructor(
-        //private auth: AuthService,
+        private authService: Auth0Service,
         private navCtrl: NavController,
         private router: Router
     ) { }
 
     ngOnInit() {
-        // //this.auth.authorizationCallback(window.location.origin + this.router.url);
-        // this.auth.endSessionCallback();
-        //
-        // console.log('EndSessionPage:ngOnInit ');
-        // this.navCtrl.navigateRoot('home');
+        console.log('EndSessionPage ngOnInit');
+        console.log(this.authService);
+        this.authService.handleRedirectEndSession();
     }
 
 }

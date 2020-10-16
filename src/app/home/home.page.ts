@@ -56,8 +56,12 @@ export class HomePage implements OnInit, OnDestroy {
         this.initListDetailsForm();
     }
 
-    logIn(){
+    login(){
         this.authService.login();
+    }
+
+    logout(){
+        this.authService.logout();
     }
 
     private initListDetailsForm() {

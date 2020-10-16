@@ -3,6 +3,7 @@ import createAuth0Client from '@wizzn/auth0-capacitor';
 import {environment} from '../../environments/environment';
 import Auth0Client from '@wizzn/auth0-capacitor/dist/typings/Auth0Client';
 import {Router} from '@angular/router';
+import {LogoutOptions} from '@wizzn/auth0-capacitor/dist/typings/global';
 
 @Injectable({
     providedIn: 'root'
@@ -10,10 +11,10 @@ import {Router} from '@angular/router';
 export class Auth0Service {
 
     private auth0: Auth0Client;
-    isLoggedIn: boolean;
+    public isLoggedIn: boolean;
 
     constructor(private router: Router) {
-        this.isLoggedIn = true;
+        this.isLoggedIn = false;
     }
 
     private async getAuth0() {
@@ -29,22 +30,28 @@ export class Auth0Service {
 
     async login() {
         (await this.getAuth0()).loginWithRedirect().catch(() => {
-            console.log('loginWithRedirect ERROR');
+            console.log('ERROR login');
         });
     }
 
     async handleRedirectCallback() {
         (await this.getAuth0()).handleRedirectCallback().then(
             redirectResult => {
-                // logged in
+                console.log('login');
                 this.isLoggedIn = true;
                 this.router.navigateByUrl('/home');
-
             }).catch(
-                reason => console.log('ERROR login !'));
+            reason => console.log('ERROR handleRedirectCallback'));
     }
 
-    async getToken() {
+    handleRedirectEndSession() {
+        // logout
+        console.log('logout');
+        this.isLoggedIn = false;
+        this.router.navigateByUrl('/home');
+    }
+
+    async getIdToken() {
         const idToken = await (await this.getAuth0()).getIdTokenClaims();
         console.log('token = ');
         console.log(idToken.__raw);
@@ -56,6 +63,11 @@ export class Auth0Service {
         console.log('user = ');
         console.log(user);
         return user;
+    }
+
+    async logout() {
+        await (await this.getAuth0()).logout().catch(
+            reason => console.log('ERROR logout !'));
     }
 
 
