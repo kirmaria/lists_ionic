@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {ItemDTO, ItemsListDTO, ItemsListValuesDTO, ItemValuesDTO} from '../dto/itemslist';
-import {API_ITEMS_LIST_URL, API_ITEM_URL} from '../shared/baseurl';
+import {API_ITEMS_LIST_URL, API_ITEM_URL} from '../shared/app-constants';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {ProcessHttpMsgService} from './process-http-msg.service';
 import {catchError} from 'rxjs/operators';

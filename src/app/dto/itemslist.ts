@@ -17,6 +17,8 @@ export enum EditPropertiesType {
     duplicate
 }
 
+// Item
+
 export class ItemValuesDTO {
     label: string;
     description: string;
@@ -28,10 +30,11 @@ export class ItemValuesDTO {
         this.label = '';
         this.description = '';
         this.unit = UnitType.pcs;
-        this.quantity = 0;
+        this.quantity = 1;
         this.checked = false;
     }
 }
+
 
 export class ItemDTO {
     id: string;
@@ -43,6 +46,8 @@ export class ItemDTO {
     }
 }
 
+
+// Lists
 export class ItemsListValuesDTO {
     name: string;
     description: string;

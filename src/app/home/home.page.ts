@@ -17,7 +17,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 import {Auth0Service} from '../services/auth0.service';
 
-
+import {Platform} from '@ionic/angular';
+import {localstorageTokenKey} from '../shared/app-constants';
 
 @Component({
     selector: 'app-home',
@@ -47,7 +48,8 @@ export class HomePage implements OnInit, OnDestroy {
         @Inject('editPropTypeEnum') public editPropTypeEnum,
         private formBuilder: FormBuilder,
         private keyboard: Keyboard,
-        private authService: Auth0Service) {
+        private authService: Auth0Service,
+        public platform: Platform) {
 
         this.title = 'My lists';
 
@@ -56,11 +58,19 @@ export class HomePage implements OnInit, OnDestroy {
         this.initListDetailsForm();
     }
 
-    login(){
+    login() {
+
+        // const toast = await this.toastCtrl.create({
+        //     message: this.platform.platforms().toString(),
+        //     duration: 5000
+        // });
+        // toast.present();
+
         this.authService.login();
+
     }
 
-    logout(){
+    logout() {
         this.authService.logout();
     }
 
@@ -73,7 +83,10 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.getLists();
+
+        this.authService.getIdToken().then(idToken => {
+            localStorage.setItem(localstorageTokenKey, idToken);
+        }).finally(() => this.getLists());
 
     }
 

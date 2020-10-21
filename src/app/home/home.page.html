@@ -7,10 +7,10 @@
         </ion-buttons>
 
         <ion-buttons slot="end">
-            <button *ngIf="!authService.isLoggedIn" ion-button (click)="login()">
+            <button *ngIf="!authService.isLoggedIn()" ion-button (click)="login()">
                 <ion-icon  name="person-outline" slot="icon-only"></ion-icon>
             </button>
-            <button *ngIf="authService.isLoggedIn" ion-button (click)="logout()">
+            <button *ngIf="authService.isLoggedIn()" ion-button (click)="logout()">
                 <ion-icon  name="log-out" slot="icon-only"></ion-icon>
             </button>
         </ion-buttons>

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {ItemDTO, ItemsListDTO, ItemValuesDTO, EditPropertiesType} from '../../dto/itemslist';
+import {ItemDTO, ItemsListDTO, EditPropertiesType} from '../../dto/itemslist';
 import {
     AlertController, IonInput,
     IonItemSliding,
@@ -9,9 +9,7 @@ import {
     NavParams,
     ToastController
 } from '@ionic/angular';
-import {OverlayEventDetail} from '@ionic/core';
 import {ItemsListService} from '../../services/itemslist.service';
-import {ItemDetailsPage} from '../item-details/item-details.page';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
 

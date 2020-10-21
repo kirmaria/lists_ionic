@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController} from '@ionic/angular';
-import {Router} from '@angular/router';
 import {Auth0Service} from '../../../services/auth0.service';
 
 
@@ -9,15 +7,10 @@ import {Auth0Service} from '../../../services/auth0.service';
 })
 export class AuthCallbackPage implements OnInit {
 
-    constructor(
-        private authService: Auth0Service,
-        private navCtrl: NavController,
-        private router: Router
-    ) {
+    constructor(private authService: Auth0Service) {
     }
 
     ngOnInit() {
-        console.log('AuthCallbackPage ngOnInit');
         this.authService.handleRedirectCallback();
     }
 }

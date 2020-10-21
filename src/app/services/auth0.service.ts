@@ -3,6 +3,7 @@ import createAuth0Client from '@wizzn/auth0-capacitor';
 import {environment} from '../../environments/environment';
 import Auth0Client from '@wizzn/auth0-capacitor/dist/typings/Auth0Client';
 import {Router} from '@angular/router';
+import { Platform } from '@ionic/angular';
 import {LogoutOptions} from '@wizzn/auth0-capacitor/dist/typings/global';
 
 @Injectable({
@@ -11,22 +12,34 @@ import {LogoutOptions} from '@wizzn/auth0-capacitor/dist/typings/global';
 export class Auth0Service {
 
     private auth0: Auth0Client;
-    public isLoggedIn: boolean;
+    private config: any;
+    private loggedIn: boolean;
 
-    constructor(private router: Router) {
-        this.isLoggedIn = false;
+    constructor(private router: Router,
+                public platform: Platform) {
+        this.loggedIn = false;
+        console.log('Platform: ');
+        console.log(this.platform.platforms());
+
+        if (this.platform.is('mobile')) {
+            this.config = environment.auth_config_native;
+        } else {
+            this.config = environment.auth_config_web;
+        }
+
     }
+
+    public isLoggedIn(){
+        return this.loggedIn;
+    };
 
     private async getAuth0() {
         if (typeof this.auth0 === 'undefined') {
-            this.auth0 = await createAuth0Client({
-                domain: environment.auth_config.domain,
-                client_id: environment.auth_config.client_id,
-                redirect_uri: environment.auth_config.redirect_uri
-            });
+            this.auth0 = await createAuth0Client(this.config);
         }
         return this.auth0;
     }
+
 
     async login() {
         (await this.getAuth0()).loginWithRedirect().catch(() => {
@@ -38,7 +51,7 @@ export class Auth0Service {
         (await this.getAuth0()).handleRedirectCallback().then(
             redirectResult => {
                 console.log('login');
-                this.isLoggedIn = true;
+                this.loggedIn = true;
                 this.router.navigateByUrl('/home');
             }).catch(
             reason => console.log('ERROR handleRedirectCallback'));
@@ -47,7 +60,7 @@ export class Auth0Service {
     handleRedirectEndSession() {
         // logout
         console.log('logout');
-        this.isLoggedIn = false;
+        this.loggedIn = false;
         this.router.navigateByUrl('/home');
     }
 

@@ -9,12 +9,14 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 
-import {baseURL} from './shared/baseurl';
+import {baseURL} from './shared/app-constants';
 
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {ListType, UnitType, EditPropertiesType} from './dto/itemslist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
+
+import { AuthInterceptor } from './services/auth.interceptor';
 
 @NgModule({
     declarations: [
@@ -39,6 +41,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         {provide: 'listTypeEnum', useValue: ListType},
         {provide: 'unitTypeEnum', useValue: UnitType},
         {provide: 'editPropTypeEnum', useValue: EditPropertiesType},
+        {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     ],
     bootstrap: [AppComponent]
 })

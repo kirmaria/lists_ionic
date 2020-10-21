@@ -4,35 +4,20 @@
 
 export const environment = {
     production: false,
-    // auth_config: {
-    //     client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
-    //     server_host: 'https://dev-pjs46xuy.eu.auth0.com',
-    //     redirect_url: 'http://localhost:8100',
-    //     end_session_redirect_url: 'http://localhost:8100',
-    //     scopes: 'openid offline_access',
-    //     pkce: true,
-    //     metadata: {
-    //         issuer: 'https://dev-pjs46xuy.eu.auth0.com',
-    //         authorization_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/authorize',
-    //         userinfo_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/userinfo',
-    //         end_session_endpoint: 'https://dev-pjs46xuy.eu.auth0.com/v2/logout',
-    //         jwks_uri: 'https://dev-pjs46xuy.eu.auth0.com/.well-known/jwks.json',
-    //     }
-    // },
-    // auth_config_native: {
-    //     client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
-    //     server_host: 'https://dev-pjs46xuy.eu.auth0.com',
-    //     redirect_url: 'com.appauth.demo://callback',
-    //     end_session_redirect_url: 'com.appauth.demo://endsession',
-    //     scopes: 'openid offline_access',
-    //     pkce: true
-    // }
-    auth_config: {
+    auth_config_web: {
         domain: 'dev-pjs46xuy.eu.auth0.com',
         client_id: 'kqD66z640iolF211UARtcqiWzAVYogoi',
-        redirect_uri: 'http://localhost:8100/auth/callback'
+        redirect_uri: 'http://localhost:8100/auth/callback',
+        end_session_redirect_uri : 'http://localhost:8100/auth/endsession'
+    },
+    auth_config_native: {
+        domain: 'dev-pjs46xuy.eu.auth0.com',
+        client_id: 'akTIzDhEx3BK74vlj2tL2Tr66IiyS3C6',
+        redirect_uri: 'com.ionic.starter://dev-pjs46xuy.eu.auth0.com/cordova/io.ionic.starter/callback',
+        end_session_redirect_uri : 'io.ionic.starter://dev-pjs46xuy.eu.auth0.com/cordova/io.ionic.starter/endsession'
     }
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file
