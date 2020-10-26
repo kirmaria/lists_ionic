@@ -7,17 +7,35 @@
         </ion-buttons>
 
         <ion-buttons slot="end">
-            <ion-button fill="solid" size="small" *ngIf="!authService.isLoggedIn()" (click)="login()">
+            <ion-button  size="small" *ngIf="!authService.isLoggedIn()" (click)="login()">
                 <ion-icon  name="person-outline" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button fill="solid" size="small" *ngIf="authService.isLoggedIn()" (click)="logout()">
-                <ion-icon  name="log-out" slot="icon-only"></ion-icon>
+            <ion-button  size="small" *ngIf="authService.isLoggedIn()" (click)="logout()">
+                <ion-icon name="walk-outline" slot="icon-only"></ion-icon>
             </ion-button>
         </ion-buttons>
 
+
     </ion-toolbar>
 
+
 </ion-header>
+
+<div *ngIf="(editPropType === editPropTypeEnum.none)" slot="fixed" >
+    <ion-toolbar slot="fixed">
+        <ion-buttons>
+            <ion-button  size="small" (click)="createList()">
+                <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
+            <ion-button  size="small" (click)="filterList()">
+                <ion-icon name="funnel-outline"></ion-icon>
+            </ion-button>
+            <ion-button  size="small" (click)="findList()">
+                <ion-icon name="search-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</div>
 
 <ion-content>
 
@@ -60,16 +78,8 @@
 
     <div *ngIf="editPropType === editPropTypeEnum.none">
 
-        <ion-toolbar>
-            <ion-buttons>
-                <ion-button fill="solid" size="small" (click)="createList()">
-                    <ion-icon name="add" slot="icon-only"></ion-icon>
-                </ion-button>
-            </ion-buttons>
-        </ion-toolbar>
-
-
         <ion-list *ngIf="isMobile()">
+
             <ion-item-sliding *ngFor="let list of lists" text-wrap  #sld_list_item>
                 <ion-item button (click)="editList(list)">
                     <ion-icon *ngIf="list.value.type == listTypeEnum.checkingList" name="checkbox-outline"></ion-icon>
@@ -85,22 +95,30 @@
                     </ion-label>
                 </ion-item>
                 <ion-item-options side="start">
-                    <ion-button size="small" color="danger" (click)="removeList(list, sld_list_item)">
-                        <ion-icon slot="icon-only" name="trash"></ion-icon>
-                    </ion-button>
+                    <ion-buttons>
+                        <ion-button size="small" color="danger" (click)="removeList(list, sld_list_item)">
+                            <ion-icon slot="icon-only" name="trash"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
                 </ion-item-options>
                 <ion-item-options side="end">
-                    <ion-button size="small" (click)="updateInfoList(list)">
-                        <ion-icon slot="icon-only" name="create"></ion-icon>
-                    </ion-button>
-                    <ion-button size="small" (click)="duplicateList(list)">
-                        <ion-icon slot="icon-only" name="duplicate"></ion-icon>
-                    </ion-button>
+                    <ion-buttons>
+                        <ion-button size="small"  (click)="updateInfoList(list)">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button size="small" (click)="duplicateList(list)">
+                            <ion-icon slot="icon-only" name="duplicate"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
                 </ion-item-options>
             </ion-item-sliding>
+
+            <ion-item style="height: 3em"></ion-item>
         </ion-list>
 
+
         <ion-list *ngIf="!isMobile()" >
+
             <ion-item *ngFor="let list of lists" text-wrap>
                 <ion-grid>
                     <ion-row>
@@ -125,15 +143,20 @@
                             </ion-grid>
                         </ion-col>
                         <ion-col size="auto">
-                            <ion-button size="small" (click)="updateInfoList(list)">
-                                <ion-icon slot="icon-only" name="create"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" (click)="duplicateList(list)">
-                                <ion-icon slot="icon-only" name="duplicate"></ion-icon>
-                            </ion-button>
-                            <ion-button size="small" color="danger" (click)="removeList(list, null)">
-                                <ion-icon slot="icon-only" name="trash"></ion-icon>
-                            </ion-button>
+                            <ion-buttons>
+                                <ion-button size="small" (click)="openMenuList(list)">
+                                    <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                                </ion-button>
+                            </ion-buttons>
+<!--                            <ion-button size="small" (click)="updateInfoList(list)">-->
+<!--                                <ion-icon slot="icon-only" name="create"></ion-icon>-->
+<!--                            </ion-button>-->
+<!--                            <ion-button size="small" (click)="duplicateList(list)">-->
+<!--                                <ion-icon slot="icon-only" name="duplicate"></ion-icon>-->
+<!--                            </ion-button>-->
+<!--                            <ion-button size="small" color="danger" (click)="removeList(list, null)">-->
+<!--                                <ion-icon slot="icon-only" name="trash"></ion-icon>-->
+<!--                            </ion-button>-->
                         </ion-col>
                     </ion-row>
                 </ion-grid>
@@ -142,4 +165,7 @@
 
     </div>
 
+
 </ion-content>
+
+
