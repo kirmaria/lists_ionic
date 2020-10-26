@@ -2,9 +2,9 @@
     <ion-toolbar>
         <ion-title>{{title}}</ion-title>
         <ion-buttons slot="start">
-            <button ion-button size="small" (click)="this.onExit()">
+            <ion-button fill="solid" size="small" (click)="this.onExitListEdit()">
                 <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
-            </button>
+            </ion-button>
         </ion-buttons>
     </ion-toolbar>
 </ion-header>
@@ -54,9 +54,9 @@
 
             <ion-toolbar>
                 <ion-buttons>
-                    <button ion-button size="small" (click)="createItem()">
+                    <ion-button fill="solid" size="small"  (click)="createItem()">
                         <ion-icon name="add" slot="icon-only"></ion-icon>
-                    </button>
+                    </ion-button>
                 </ion-buttons>
             </ion-toolbar>
 

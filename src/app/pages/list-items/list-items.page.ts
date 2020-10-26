@@ -66,7 +66,7 @@ export class ListItemsPage implements OnInit {
     }
 
 
-    onExit() {
+    onExitListEdit() {
         this.modalCtrl.dismiss({
             dismissed: true
         });

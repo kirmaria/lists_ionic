@@ -58,6 +58,11 @@ export class HomePage implements OnInit, OnDestroy {
         this.initListDetailsForm();
     }
 
+
+    isMobile () {
+       return window.innerWidth < 768;
+    }
+
     login() {
 
         // const toast = await this.toastCtrl.create({
@@ -222,7 +227,8 @@ export class HomePage implements OnInit, OnDestroy {
         });
 
         alert.present();
-        sldListItem.close();
+        if (sldListItem != null)
+            sldListItem.close();
 
     }
 
