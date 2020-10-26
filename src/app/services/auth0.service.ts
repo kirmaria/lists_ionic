@@ -5,6 +5,7 @@ import Auth0Client from '@wizzn/auth0-capacitor/dist/typings/Auth0Client';
 import {Router} from '@angular/router';
 import { Platform } from '@ionic/angular';
 import {LogoutOptions} from '@wizzn/auth0-capacitor/dist/typings/global';
+import {authFlagKey} from '../shared/app-constants';
 
 @Injectable({
     providedIn: 'root'
@@ -13,11 +14,11 @@ export class Auth0Service {
 
     private auth0: Auth0Client;
     private config: any;
-    private loggedIn: boolean;
+
 
     constructor(private router: Router,
                 public platform: Platform) {
-        this.loggedIn = false;
+
         console.log('Platform: ');
         console.log(this.platform.platforms());
 
@@ -29,9 +30,9 @@ export class Auth0Service {
 
     }
 
-    public isLoggedIn(){
-        return this.loggedIn;
-    };
+    public isLoggedIn() {
+        return (JSON.parse(localStorage.getItem(authFlagKey)) === true);
+    }
 
     private async getAuth0() {
         if (typeof this.auth0 === 'undefined') {
@@ -51,7 +52,6 @@ export class Auth0Service {
         (await this.getAuth0()).handleRedirectCallback().then(
             redirectResult => {
                 console.log('login');
-                this.loggedIn = true;
                 this.router.navigateByUrl('/home');
             }).catch(
             reason => console.log('ERROR handleRedirectCallback'));
@@ -60,7 +60,6 @@ export class Auth0Service {
     handleRedirectEndSession() {
         // logout
         console.log('logout');
-        this.loggedIn = false;
         this.router.navigateByUrl('/home');
     }
 

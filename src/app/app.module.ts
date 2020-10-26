@@ -18,6 +18,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AuthInterceptor } from './services/auth.interceptor';
 
+//
+// import { TooltipsModule } from 'ionic-tooltips';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -31,7 +34,9 @@ import { AuthInterceptor } from './services/auth.interceptor';
         AppRoutingModule,
         HttpClientModule,
         ReactiveFormsModule,
-        FormsModule
+        FormsModule,
+
+        // TooltipsModule.forRoot(),
     ],
     providers: [
         StatusBar,

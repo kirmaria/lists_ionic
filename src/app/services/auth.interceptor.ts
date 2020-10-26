@@ -2,7 +2,7 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/com
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Auth0Service} from './auth0.service';
-import {localstorageTokenKey} from '../shared/app-constants';
+import {listsTokenKey} from '../shared/app-constants';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 setHeaders: {
                     'Content-Type': 'application/json; charset=utf-8',
                     Accept: 'application/json',
-                    Authorization: `Bearer ` + localStorage.getItem(localstorageTokenKey),
+                    Authorization: `Bearer ` + localStorage.getItem(listsTokenKey),
                 },
             });
             return next.handle(newReq);

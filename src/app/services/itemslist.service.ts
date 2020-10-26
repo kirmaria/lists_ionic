@@ -43,19 +43,14 @@ export class ItemsListService {
     }
 
 
-    addItemToList(itemVal: ItemValuesDTO, list: ItemsListDTO): Observable<ItemsListDTO> {
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', itemVal)
+    addItemToList(itemVal: ItemValuesDTO, list: ItemsListDTO, prepend: boolean): Observable<ItemsListDTO> {
+        const param = new HttpParams().set('prepend', prepend ? 'true' : 'false' );
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', itemVal, {params: param})
             .pipe(catchError(this.processHttpMsgService.handleError));
     }
 
     updateItem(item: ItemDTO, val: ItemValuesDTO): Observable<ItemsListDTO> {
         return this.http.put<ItemsListDTO>(API_ITEM_URL + '/' + item.id, val)
-            .pipe(catchError(this.processHttpMsgService.handleError));
-    }
-
-    duplicateItem(itemToDuplicate: ItemDTO, list: ItemsListDTO): Observable<ItemsListDTO> {
-        const param = new HttpParams().set('itemId', itemToDuplicate.id);
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', null, {params: param})
             .pipe(catchError(this.processHttpMsgService.handleError));
     }
 

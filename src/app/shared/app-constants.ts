@@ -6,4 +6,7 @@ export const API_ITEM_URL = baseURL + '/api/v1/items';
 
 
 // localstorage auth token key name sent as bearer in all http requests
-export const localstorageTokenKey = 'listsToken';
+export const listsTokenKey = 'listsToken';
+
+
+export const authFlagKey = '_cap_auth0.is.authenticated';

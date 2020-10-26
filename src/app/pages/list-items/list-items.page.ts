@@ -73,9 +73,11 @@ export class ListItemsPage implements OnInit {
     }
 
     private onSubmitPropertyList(): void {
+        const prepend = true;
+
         switch (this.editPropType) {
             case this.editPropTypeEnum.create: {
-                this.listService.addItemToList( this.itemDetailsForm.value, this.list)
+                this.listService.addItemToList( this.itemDetailsForm.value, this.list, prepend)
                     .subscribe(
                         list => {
                             this.list = list;
@@ -99,7 +101,7 @@ export class ListItemsPage implements OnInit {
                 break;
             }
             case this.editPropTypeEnum.duplicate: {
-                this.listService.duplicateItem(this.crtItem, this.list)
+                this.listService.addItemToList(this.itemDetailsForm.value, this.list, prepend)
                     .subscribe(
                         list => {
                             this.list = list;

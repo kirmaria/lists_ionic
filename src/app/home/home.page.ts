@@ -18,7 +18,7 @@ import {Keyboard} from '@ionic-native/keyboard/ngx';
 import {Auth0Service} from '../services/auth0.service';
 
 import {Platform} from '@ionic/angular';
-import {localstorageTokenKey} from '../shared/app-constants';
+import {listsTokenKey} from '../shared/app-constants';
 
 @Component({
     selector: 'app-home',
@@ -85,7 +85,7 @@ export class HomePage implements OnInit, OnDestroy {
     ngOnInit(): void {
 
         this.authService.getIdToken().then(idToken => {
-            localStorage.setItem(localstorageTokenKey, idToken);
+            localStorage.setItem(listsTokenKey, idToken);
         }).finally(() => this.getLists());
 
     }
