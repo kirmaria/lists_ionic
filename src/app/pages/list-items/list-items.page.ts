@@ -6,12 +6,14 @@ import {
     LoadingController,
     ModalController,
     NavController,
-    NavParams,
+    NavParams, PopoverController,
     ToastController
 } from '@ionic/angular';
+import {OverlayEventDetail} from '@ionic/core';
 import {ItemsListService} from '../../services/itemslist.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Keyboard} from '@ionic-native/keyboard/ngx';
+import {EditPopupMenuComponent} from '../../components/list-popup-menu/edit-popup-menu.component';
 
 @Component({
     selector: 'app-list-items',
@@ -43,7 +45,8 @@ export class ListItemsPage implements OnInit {
                 @Inject('unitTypeEnum') public unitTypeEnum,
                 @Inject('editListTypeEnum') public editListTypeEnum,
                 @Inject('listTypeEnum') public listTypeEnum,
-                private keyboard: Keyboard) {
+                private keyboard: Keyboard,
+                private popoverController: PopoverController) {
 
         this.list = navParams.get('list');
         this.title = 'List [' + this.list.value.name + ']';
@@ -52,6 +55,10 @@ export class ListItemsPage implements OnInit {
         this.unitTypeEnumKeys = Object.keys(unitTypeEnum);
         this.editListType = this.editListTypeEnum.none;
         this.initItemDetailsForm();
+    }
+
+    isMobileSize() {
+        return window.innerWidth < 768;
     }
 
     private initItemDetailsForm(){
@@ -130,7 +137,7 @@ export class ListItemsPage implements OnInit {
         setTimeout(() => this.itemLabelInputElt.setFocus(), 100);
     }
 
-    async updateItem(item: ItemDTO, sldItem: IonItemSliding) {
+    async updateItem(item: ItemDTO) {
         this.crtItem = item;
         this.initItemDetailsForm();
         this.editListType = this.editListTypeEnum.update;
@@ -164,7 +171,7 @@ export class ListItemsPage implements OnInit {
             duration: 2000
         });
         const toast = await this.toastCtrl.create({
-            message: 'Item [<strong>' + itemToRemove.value.label + '</strong>] was deleted successfully!',
+            message: 'Item [<strong>' + itemToRemove.value.label + '</strong>] was successfully deleted!',
             duration: 2000
         });
 
@@ -201,8 +208,38 @@ export class ListItemsPage implements OnInit {
         });
 
         alert.present();
-        sldItem.close();
-
+        if (sldItem !== null) {
+            sldItem.close();
+        }
     }
 
+
+    async openMenuItem(myEvent: Event, item: ItemDTO) {
+        const popover: HTMLIonPopoverElement = await this.popoverController.create({
+            component: EditPopupMenuComponent,
+            showBackdrop: true,
+            event: myEvent
+        });
+
+        popover.onDidDismiss().then((detail: OverlayEventDetail) => {
+            if ((detail !== null) && (typeof detail.data !== 'undefined') && (typeof detail.data.editListType !== 'undefined')) {
+                switch (detail.data.editListType) {
+                    case EditListType.update: {
+                        this.updateItem(item);
+                        break;
+                    }
+                    case EditListType.duplicate: {
+                        this.duplicateItem(item);
+                        break;
+                    }
+                    case EditListType.delete: {
+                        this.removeItem(item, null);
+                        break;
+                    }
+                }
+            }
+        });
+
+        await popover.present();
+    }
 }

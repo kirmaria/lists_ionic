@@ -19,7 +19,7 @@ import {Auth0Service} from '../services/auth0.service';
 
 import {Platform} from '@ionic/angular';
 import {listsTokenKey} from '../shared/app-constants';
-import {ListPopupMenuComponent} from '../components/list-popup-menu/list-popup-menu.component';
+import {EditPopupMenuComponent} from '../components/list-popup-menu/edit-popup-menu.component';
 
 
 @Component({
@@ -62,7 +62,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    isMobile() {
+    isMobileSize() {
         return window.innerWidth < 768;
     }
 
@@ -102,7 +102,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    private onSubmitPropertyList(): void {
+    private onEditList(): void {
 
         switch (this.editListType) {
             case this.editListTypeEnum.create: {
@@ -148,7 +148,7 @@ export class HomePage implements OnInit, OnDestroy {
 
     }
 
-    private onCancelPropertyList(): void {
+    private onCancelEditList(): void {
         this.editListType = this.editListTypeEnum.none;
     }
 
@@ -194,7 +194,7 @@ export class HomePage implements OnInit, OnDestroy {
             duration: 2000
         });
         const toast = await this.toastCtrl.create({
-            message: 'List [<strong>' + listToRemove.value.name + '</strong>] was deleted successfully!',
+            message: 'List [<strong>' + listToRemove.value.name + '</strong>] was successfully deleted!',
             duration: 2000
         });
 
@@ -255,8 +255,8 @@ export class HomePage implements OnInit, OnDestroy {
 
     async openMenuList(myEvent: Event, list: ItemsListDTO) {
         const popover: HTMLIonPopoverElement = await this.popoverController.create({
-            component: ListPopupMenuComponent,
-            showBackdrop: false,
+            component: EditPopupMenuComponent,
+            showBackdrop: true,
             event: myEvent
         });
 

@@ -1,11 +1,9 @@
 <ion-header [translucent]="true" mode=" ">
     <ion-toolbar>
         <ion-title>{{title}}</ion-title>
-
         <ion-buttons slot="start">
             <ion-menu-button autoHide="false"></ion-menu-button>
         </ion-buttons>
-
         <ion-buttons slot="end">
             <ion-button  size="small" *ngIf="!authService.isLoggedIn()" (click)="login()">
                 <ion-icon  name="person-outline" slot="icon-only"></ion-icon>
@@ -14,11 +12,7 @@
                 <ion-icon name="walk-outline" slot="icon-only"></ion-icon>
             </ion-button>
         </ion-buttons>
-
-
     </ion-toolbar>
-
-
 </ion-header>
 
 <div *ngIf="(editListType === editListTypeEnum.none)" slot="fixed" >
@@ -28,10 +22,10 @@
                 <ion-icon name="add" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button  size="small" (click)="filterList()">
-                <ion-icon name="funnel-outline"></ion-icon>
+                <ion-icon name="funnel-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button  size="small" (click)="findList()">
-                <ion-icon name="search-outline"></ion-icon>
+                <ion-icon name="search-outline" slot="icon-only"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -41,7 +35,7 @@
 
     <ion-card *ngIf="editListType != editListTypeEnum.none">
         <ion-card-content>
-            <form [formGroup]="listDetailsForm" (ngSubmit)="onSubmitPropertyList()">
+            <form [formGroup]="listDetailsForm" (ngSubmit)="onEditList()">
                 <ion-item *ngIf="editListType === editListTypeEnum.create">
                     <ion-label position="floating">Type</ion-label>
                     <ion-select interface="popover" formControlName="type">
@@ -59,13 +53,13 @@
                     <ion-textarea rows="3" formControlName="description"></ion-textarea>
                 </ion-item>
 
-                <ion-grid >
+                <ion-grid>
                     <ion-row>
                         <ion-col></ion-col>
                         <ion-col>
                             <ion-buttons>
                                 <ion-button fill="solid" type="submit" [disabled]="!listDetailsForm.valid">OK</ion-button>
-                                <ion-button fill="solid" (click)="onCancelPropertyList()" >Cancel</ion-button>
+                                <ion-button fill="solid" (click)="onCancelEditList()" >Cancel</ion-button>
                             </ion-buttons>
                         </ion-col>
                         <ion-col></ion-col>
@@ -78,7 +72,7 @@
 
     <div *ngIf="editListType === editListTypeEnum.none">
 
-        <ion-list *ngIf="isMobile()">
+        <ion-list *ngIf="isMobileSize()">
 
             <ion-item-sliding *ngFor="let list of lists" text-wrap  #sld_list_item>
                 <ion-item button (click)="editList(list)">
@@ -113,18 +107,17 @@
                 </ion-item-options>
             </ion-item-sliding>
 
-            <ion-item style="height: 3em"></ion-item>
         </ion-list>
 
 
-        <ion-list *ngIf="!isMobile()" >
+        <ion-list *ngIf="!isMobileSize()" >
 
-            <ion-item *ngFor="let list of lists" text-wrap>
+            <ion-item button *ngFor="let list of lists" text-wrap>
                 <ion-grid>
-                    <ion-row>
-                        <ion-col button (click)="editList(list)">
+                    <ion-row >
+                        <ion-col (click)="editList(list)">
                             <ion-grid>
-                                <ion-row>
+                                <ion-row >
                                     <ion-col size="auto">
                                         <ion-icon *ngIf="list.value.type == listTypeEnum.checkingList" name="checkbox-outline"></ion-icon>
                                         <ion-icon *ngIf="list.value.type == listTypeEnum.shoppingList" name="cart-outline"></ion-icon>
@@ -145,7 +138,7 @@
                         <ion-col size="auto">
                             <ion-buttons>
                                 <ion-button size="small" (click)="openMenuList($event, list)">
-                                    <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+                                    <ion-icon name="ellipsis-vertical-outline"></ion-icon>
                                 </ion-button>
                             </ion-buttons>
                         </ion-col>

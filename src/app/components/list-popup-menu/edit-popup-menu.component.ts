@@ -5,10 +5,10 @@ import {EditListType} from '../../dto/itemslist';
 
 @Component({
     selector: 'app-list-popup-menu',
-    templateUrl: './list-popup-menu.component.html',
-    styleUrls: ['./list-popup-menu.component.scss'],
+    templateUrl: './edit-popup-menu.component.html',
+    styleUrls: ['./edit-popup-menu.component.scss'],
 })
-export class ListPopupMenuComponent implements OnInit {
+export class EditPopupMenuComponent implements OnInit {
 
     editListType: EditListType;
     constructor(private popoverController: PopoverController,

@@ -10,3 +10,5 @@ export const listsTokenKey = 'listsToken';
 
 
 export const authFlagKey = '_cap_auth0.is.authenticated';
+
+
