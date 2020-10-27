@@ -42,6 +42,7 @@ export class ListItemsPage implements OnInit {
                 private formBuilder: FormBuilder,
                 @Inject('unitTypeEnum') public unitTypeEnum,
                 @Inject('editListTypeEnum') public editListTypeEnum,
+                @Inject('listTypeEnum') public listTypeEnum,
                 private keyboard: Keyboard) {
 
         this.list = navParams.get('list');
