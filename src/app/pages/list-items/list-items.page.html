@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content>
-    <ion-card *ngIf="editPropType !== editPropTypeEnum.none">
+    <ion-card *ngIf="editListType !== editListTypeEnum.none">
         <ion-card-content>
             <form [formGroup]="itemDetailsForm" (ngSubmit)="onSubmitPropertyList()">
 
@@ -50,7 +50,7 @@
         </ion-card-content>
     </ion-card>
 
-    <div *ngIf="editPropType === editPropTypeEnum.none">
+    <div *ngIf="editListType === editListTypeEnum.none">
 
             <ion-toolbar>
                 <ion-buttons>

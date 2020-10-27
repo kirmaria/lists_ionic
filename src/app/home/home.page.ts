@@ -1,5 +1,5 @@
 import {Component, OnInit, Inject, OnDestroy, ViewChild} from '@angular/core';
-import {ItemsListDTO, EditPropertiesType} from '../dto/itemslist';
+import {ItemsListDTO, EditListType} from '../dto/itemslist';
 import {ItemsListService} from '../services/itemslist.service';
 import {
     AlertController,
@@ -7,7 +7,7 @@ import {
     LoadingController,
     ModalController,
     ToastController,
-    IonInput
+    IonInput, PopoverController
 } from '@ionic/angular';
 
 import {OverlayEventDetail} from '@ionic/core';
@@ -19,6 +19,8 @@ import {Auth0Service} from '../services/auth0.service';
 
 import {Platform} from '@ionic/angular';
 import {listsTokenKey} from '../shared/app-constants';
+import {ListPopupMenuComponent} from '../components/list-popup-menu/list-popup-menu.component';
+
 
 @Component({
     selector: 'app-home',
@@ -34,7 +36,7 @@ export class HomePage implements OnInit, OnDestroy {
 
     @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
     crtList: ItemsListDTO;
-    editPropType: EditPropertiesType;
+    editListType: EditListType;
     listDetailsForm: FormGroup;
 
 
@@ -45,22 +47,23 @@ export class HomePage implements OnInit, OnDestroy {
         public loadingCtrl: LoadingController,
         public alertCtrl: AlertController,
         @Inject('listTypeEnum') public listTypeEnum,
-        @Inject('editPropTypeEnum') public editPropTypeEnum,
+        @Inject('editListTypeEnum') public editListTypeEnum,
         private formBuilder: FormBuilder,
         private keyboard: Keyboard,
         private authService: Auth0Service,
-        public platform: Platform) {
+        public platform: Platform,
+        private popoverController: PopoverController) {
 
         this.title = 'My lists';
 
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
         this.crtList = new ItemsListDTO();
         this.initListDetailsForm();
     }
 
 
-    isMobile () {
-       return window.innerWidth < 768;
+    isMobile() {
+        return window.innerWidth < 768;
     }
 
     login() {
@@ -101,8 +104,8 @@ export class HomePage implements OnInit, OnDestroy {
 
     private onSubmitPropertyList(): void {
 
-        switch (this.editPropType) {
-            case this.editPropTypeEnum.create: {
+        switch (this.editListType) {
+            case this.editListTypeEnum.create: {
                 this.listService.addList(this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -114,7 +117,7 @@ export class HomePage implements OnInit, OnDestroy {
                         });
                 break;
             }
-            case this.editPropTypeEnum.update: {
+            case this.editListTypeEnum.update: {
                 this.listService.updateList(this.crtList, this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -126,7 +129,7 @@ export class HomePage implements OnInit, OnDestroy {
                         });
                 break;
             }
-            case this.editPropTypeEnum.duplicate: {
+            case this.editListTypeEnum.duplicate: {
                 this.listService.duplicateList(this.crtList, this.listDetailsForm.value)
                     .subscribe(
                         list => {
@@ -138,14 +141,15 @@ export class HomePage implements OnInit, OnDestroy {
                         });
                 break;
             }
+
         }
 
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
 
     }
 
     private onCancelPropertyList(): void {
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
     }
 
 
@@ -161,14 +165,14 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     async createList() {
-        this.editPropType = this.editPropTypeEnum.create;
+        this.editListType = this.editListTypeEnum.create;
         this.crtList = new ItemsListDTO();
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
     }
 
     async updateInfoList(listToUpdate: ItemsListDTO) {
-        this.editPropType = this.editPropTypeEnum.update;
+        this.editListType = this.editListTypeEnum.update;
         this.crtList = listToUpdate;
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
@@ -176,7 +180,7 @@ export class HomePage implements OnInit, OnDestroy {
 
 
     async duplicateList(listToDuplicate: ItemsListDTO) {
-        this.editPropType = this.editPropTypeEnum.duplicate;
+        this.editListType = this.editListTypeEnum.duplicate;
         this.crtList = listToDuplicate;
         this.initListDetailsForm();
         setTimeout(() => this.listNameInputElt.setFocus(), 100);
@@ -227,9 +231,9 @@ export class HomePage implements OnInit, OnDestroy {
         });
 
         alert.present();
-        if (sldListItem != null)
+        if (sldListItem != null) {
             sldListItem.close();
-
+        }
     }
 
     async editList(listToEdit: ItemsListDTO) {
@@ -248,5 +252,34 @@ export class HomePage implements OnInit, OnDestroy {
         await modal.present();
     }
 
+
+    async openMenuList(myEvent: Event, list: ItemsListDTO) {
+        const popover: HTMLIonPopoverElement = await this.popoverController.create({
+            component: ListPopupMenuComponent,
+            showBackdrop: false,
+            event: myEvent
+        });
+
+        popover.onDidDismiss().then((detail: OverlayEventDetail) => {
+            if ((detail !== null) && (typeof detail.data !== 'undefined') && (typeof detail.data.editListType !== 'undefined')) {
+                switch (detail.data.editListType) {
+                    case EditListType.update: {
+                        this.updateInfoList(list);
+                        break;
+                    }
+                    case EditListType.duplicate: {
+                        this.duplicateList(list);
+                        break;
+                    }
+                    case EditListType.delete: {
+                        this.removeList(list, null);
+                        break;
+                    }
+                }
+            }
+        });
+
+        await popover.present();
+    }
 
 }

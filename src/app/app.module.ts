@@ -12,21 +12,21 @@ import {AppRoutingModule} from './app-routing.module';
 import {baseURL} from './shared/app-constants';
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ListType, UnitType, EditPropertiesType} from './dto/itemslist';
+import {ListType, UnitType, EditListType} from './dto/itemslist';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 import { AuthInterceptor } from './services/auth.interceptor';
 
-//
-// import { TooltipsModule } from 'ionic-tooltips';
+import { ListPopupMenuComponentModule } from './components/list-popup-menu/list-popup-menu.module';
 
 @NgModule({
     declarations: [
         AppComponent,
 
     ],
-    entryComponents: [],
+    entryComponents: []
+    ,
     imports: [
         BrowserModule,
         IonicModule.forRoot({
@@ -35,8 +35,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
         HttpClientModule,
         ReactiveFormsModule,
         FormsModule,
-
-        // TooltipsModule.forRoot(),
+        ListPopupMenuComponentModule,
     ],
     providers: [
         StatusBar,
@@ -45,7 +44,7 @@ import { AuthInterceptor } from './services/auth.interceptor';
         {provide: 'BaseURL', useValue: baseURL},
         {provide: 'listTypeEnum', useValue: ListType},
         {provide: 'unitTypeEnum', useValue: UnitType},
-        {provide: 'editPropTypeEnum', useValue: EditPropertiesType},
+        {provide: 'editListTypeEnum', useValue: EditListType},
         {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     ],
     bootstrap: [AppComponent]

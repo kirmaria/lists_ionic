@@ -21,7 +21,7 @@
 
 </ion-header>
 
-<div *ngIf="(editPropType === editPropTypeEnum.none)" slot="fixed" >
+<div *ngIf="(editListType === editListTypeEnum.none)" slot="fixed" >
     <ion-toolbar slot="fixed">
         <ion-buttons>
             <ion-button  size="small" (click)="createList()">
@@ -39,10 +39,10 @@
 
 <ion-content>
 
-    <ion-card *ngIf="editPropType != editPropTypeEnum.none">
+    <ion-card *ngIf="editListType != editListTypeEnum.none">
         <ion-card-content>
             <form [formGroup]="listDetailsForm" (ngSubmit)="onSubmitPropertyList()">
-                <ion-item *ngIf="editPropType === editPropTypeEnum.create">
+                <ion-item *ngIf="editListType === editListTypeEnum.create">
                     <ion-label position="floating">Type</ion-label>
                     <ion-select interface="popover" formControlName="type">
                         <ion-select-option value={{listTypeEnum.checkingList}}>checking list</ion-select-option>
@@ -76,7 +76,7 @@
     </ion-card>
 
 
-    <div *ngIf="editPropType === editPropTypeEnum.none">
+    <div *ngIf="editListType === editListTypeEnum.none">
 
         <ion-list *ngIf="isMobile()">
 
@@ -144,19 +144,10 @@
                         </ion-col>
                         <ion-col size="auto">
                             <ion-buttons>
-                                <ion-button size="small" (click)="openMenuList(list)">
+                                <ion-button size="small" (click)="openMenuList($event, list)">
                                     <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
                                 </ion-button>
                             </ion-buttons>
-<!--                            <ion-button size="small" (click)="updateInfoList(list)">-->
-<!--                                <ion-icon slot="icon-only" name="create"></ion-icon>-->
-<!--                            </ion-button>-->
-<!--                            <ion-button size="small" (click)="duplicateList(list)">-->
-<!--                                <ion-icon slot="icon-only" name="duplicate"></ion-icon>-->
-<!--                            </ion-button>-->
-<!--                            <ion-button size="small" color="danger" (click)="removeList(list, null)">-->
-<!--                                <ion-icon slot="icon-only" name="trash"></ion-icon>-->
-<!--                            </ion-button>-->
                         </ion-col>
                     </ion-row>
                 </ion-grid>

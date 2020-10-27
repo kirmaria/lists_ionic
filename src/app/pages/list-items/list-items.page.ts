@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {ItemDTO, ItemsListDTO, EditPropertiesType} from '../../dto/itemslist';
+import {ItemDTO, ItemsListDTO, EditListType} from '../../dto/itemslist';
 import {
     AlertController, IonInput,
     IonItemSliding,
@@ -27,7 +27,7 @@ export class ListItemsPage implements OnInit {
 
     itemDetailsForm: FormGroup;
     crtItem: ItemDTO;
-    editPropType: EditPropertiesType;
+    editListType: EditListType;
     unitTypeEnumKeys: Array<string>;
 
     @ViewChild('itemLabelInput') itemLabelInputElt: IonInput;
@@ -41,7 +41,7 @@ export class ListItemsPage implements OnInit {
                 public alertCtrl: AlertController,
                 private formBuilder: FormBuilder,
                 @Inject('unitTypeEnum') public unitTypeEnum,
-                @Inject('editPropTypeEnum') public editPropTypeEnum,
+                @Inject('editListTypeEnum') public editListTypeEnum,
                 private keyboard: Keyboard) {
 
         this.list = navParams.get('list');
@@ -49,7 +49,7 @@ export class ListItemsPage implements OnInit {
 
         this.crtItem = new ItemDTO();
         this.unitTypeEnumKeys = Object.keys(unitTypeEnum);
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
         this.initItemDetailsForm();
     }
 
@@ -75,8 +75,8 @@ export class ListItemsPage implements OnInit {
     private onSubmitPropertyList(): void {
         const prepend = true;
 
-        switch (this.editPropType) {
-            case this.editPropTypeEnum.create: {
+        switch (this.editListType) {
+            case this.editListTypeEnum.create: {
                 this.listService.addItemToList( this.itemDetailsForm.value, this.list, prepend)
                     .subscribe(
                         list => {
@@ -88,7 +88,7 @@ export class ListItemsPage implements OnInit {
                         });
                 break;
             }
-            case this.editPropTypeEnum.update: {
+            case this.editListTypeEnum.update: {
                 this.listService.updateItem(this.crtItem, this.itemDetailsForm.value)
                     .subscribe(
                         list => {
@@ -100,7 +100,7 @@ export class ListItemsPage implements OnInit {
                         });
                 break;
             }
-            case this.editPropTypeEnum.duplicate: {
+            case this.editListTypeEnum.duplicate: {
                 this.listService.addItemToList(this.itemDetailsForm.value, this.list, prepend)
                     .subscribe(
                         list => {
@@ -113,11 +113,11 @@ export class ListItemsPage implements OnInit {
                 break;
             }
         }
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
     }
 
     private onCancelPropertyList(): void {
-        this.editPropType = this.editPropTypeEnum.none;
+        this.editListType = this.editListTypeEnum.none;
     }
 
 
@@ -125,19 +125,19 @@ export class ListItemsPage implements OnInit {
         this.crtItem = new ItemDTO();
         this.crtItem.value.quantity = 1;
         this.initItemDetailsForm();
-        this.editPropType = this.editPropTypeEnum.create;
+        this.editListType = this.editListTypeEnum.create;
         setTimeout(() => this.itemLabelInputElt.setFocus(), 100);
     }
 
     async updateItem(item: ItemDTO, sldItem: IonItemSliding) {
         this.crtItem = item;
         this.initItemDetailsForm();
-        this.editPropType = this.editPropTypeEnum.update;
+        this.editListType = this.editListTypeEnum.update;
         setTimeout(() => this.itemLabelInputElt.setFocus(), 100);
     }
 
     async duplicateItem(item: ItemDTO) {
-        this.editPropType = this.editPropTypeEnum.duplicate;
+        this.editListType = this.editListTypeEnum.duplicate;
         this.crtItem = item;
         this.initItemDetailsForm();
         setTimeout(() => this.itemLabelInputElt.setFocus(), 100);

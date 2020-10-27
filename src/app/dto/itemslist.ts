@@ -10,11 +10,12 @@ export enum UnitType {
     pcs = 'pcs'
 }
 
-export enum EditPropertiesType {
+export enum EditListType {
     none,
     create,
     update,
-    duplicate
+    duplicate,
+    delete
 }
 
 // Item

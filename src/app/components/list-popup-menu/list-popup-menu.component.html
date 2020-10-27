@@ -1,0 +1,22 @@
+
+<ion-content padding>
+
+  <ion-list lines="none" >
+    <ion-item button (click)="closeMenu(this.editListTypeEnum.update)">
+        <ion-icon color="primary" name="pencil-outline"></ion-icon>
+      <ion-label>Modify list</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="closeMenu(this.editListTypeEnum.duplicate)">
+        <ion-icon color="primary" name="duplicate"></ion-icon>
+      <ion-label>Duplicate list</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="closeMenu(this.editListTypeEnum.delete)">
+      <ion-icon color="danger" name="trash"></ion-icon>
+      <ion-label>Delete list</ion-label>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
