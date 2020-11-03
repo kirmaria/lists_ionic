@@ -35,7 +35,7 @@
 
     <ion-card *ngIf="editListType != editListTypeEnum.none">
         <ion-card-content>
-            <form [formGroup]="listDetailsForm" (ngSubmit)="onEditList()">
+            <form [formGroup]="listDetailsForm" (ngSubmit)="onSubmitEditList()">
                 <ion-item *ngIf="editListType === editListTypeEnum.create">
                     <ion-label position="floating">Type</ion-label>
                     <ion-select interface="popover" formControlName="type">

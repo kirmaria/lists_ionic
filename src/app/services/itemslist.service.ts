@@ -3,59 +3,65 @@ import {Observable} from 'rxjs';
 import {ItemDTO, ItemsListDTO, ItemsListValuesDTO, ItemValuesDTO} from '../dto/itemslist';
 import {API_ITEMS_LIST_URL, API_ITEM_URL} from '../shared/app-constants';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {ProcessHttpMsgService} from './process-http-msg.service';
-import {catchError} from 'rxjs/operators';
 
 
+/**
+ * ItemsListService
+ * @desc ....
+ * @memberOf ...
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class ItemsListService {
 
-    constructor(public http: HttpClient,
-                private processHttpMsgService: ProcessHttpMsgService) {
+    constructor(public http: HttpClient) {
     }
 
+    /**
+     * getLists
+     * @desc get all lists
+     * @returns Observable<ItemsListDTO[]
+     * @memberOf ItemsListService
+     */
     getLists(): Observable<ItemsListDTO[]> {
-        return this.http.get<ItemsListDTO[]>(API_ITEMS_LIST_URL)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.get<ItemsListDTO[]>(API_ITEMS_LIST_URL);
     }
 
+    /**
+     * addList
+     * @desc create a new list
+     * @param ItemsListValuesDTO val : list data
+     * @returns Observable<ItemsListDTO[]
+     * @memberOf ItemsListService
+     */
     addList(val: ItemsListValuesDTO): Observable<ItemsListDTO> {
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL, val)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL, val);
     }
 
     duplicateList(listToDuplicate: ItemsListDTO, val: ItemsListValuesDTO): Observable<ItemsListDTO> {
         const param = new HttpParams().set('listId', listToDuplicate.id);
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL, val, {params: param})
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL, val, {params: param});
     }
 
     updateList(list: ItemsListDTO, val: ItemsListValuesDTO): Observable<ItemsListDTO> {
-        return this.http.put<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id, val)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.put<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id, val);
     }
 
     removeList(list: ItemsListDTO): Observable<ItemsListDTO[]> {
-        return this.http.delete<ItemsListDTO[]>(API_ITEMS_LIST_URL + '/' + list.id)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.delete<ItemsListDTO[]>(API_ITEMS_LIST_URL + '/' + list.id);
     }
-
 
     addItemToList(itemVal: ItemValuesDTO, list: ItemsListDTO, prepend: boolean): Observable<ItemsListDTO> {
         const param = new HttpParams().set('prepend', prepend ? 'true' : 'false' );
-        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', itemVal, {params: param})
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.post<ItemsListDTO>(API_ITEMS_LIST_URL + '/' + list.id + '/items', itemVal, {params: param});
     }
 
     updateItem(item: ItemDTO, val: ItemValuesDTO): Observable<ItemsListDTO> {
-        return this.http.put<ItemsListDTO>(API_ITEM_URL + '/' + item.id, val)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.put<ItemsListDTO>(API_ITEM_URL + '/' + item.id, val);
     }
 
     removeItem(item: ItemDTO): Observable<ItemsListDTO> {
-        return this.http.delete<ItemsListDTO>(API_ITEM_URL + '/' + item.id)
-            .pipe(catchError(this.processHttpMsgService.handleError));
+        return this.http.delete<ItemsListDTO>(API_ITEM_URL + '/' + item.id);
     }
 }

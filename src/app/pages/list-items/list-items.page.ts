@@ -34,6 +34,8 @@ export class ListItemsPage implements OnInit {
 
     @ViewChild('itemLabelInput') itemLabelInputElt: IonInput;
 
+    itemChecked: boolean;
+
     constructor(private listService: ItemsListService,
                 public navCtrl: NavController,
                 public navParams: NavParams,
@@ -55,13 +57,15 @@ export class ListItemsPage implements OnInit {
         this.unitTypeEnumKeys = Object.keys(unitTypeEnum);
         this.editListType = this.editListTypeEnum.none;
         this.initItemDetailsForm();
+
+        this.itemChecked = false;
     }
 
     isMobileSize() {
         return window.innerWidth < 768;
     }
 
-    private initItemDetailsForm(){
+    private initItemDetailsForm() {
         this.itemDetailsForm = this.formBuilder.group({
             label: [this.crtItem.value.label, Validators.required],
             quantity: [this.crtItem.value.quantity, Validators.required],
@@ -80,12 +84,12 @@ export class ListItemsPage implements OnInit {
         });
     }
 
-    private onSubmitPropertyList(): void {
+    private onEditItem(): void {
         const prepend = true;
 
         switch (this.editListType) {
             case this.editListTypeEnum.create: {
-                this.listService.addItemToList( this.itemDetailsForm.value, this.list, prepend)
+                this.listService.addItemToList(this.itemDetailsForm.value, this.list, prepend)
                     .subscribe(
                         list => {
                             this.list = list;
@@ -124,7 +128,7 @@ export class ListItemsPage implements OnInit {
         this.editListType = this.editListTypeEnum.none;
     }
 
-    private onCancelPropertyList(): void {
+    private onCancelEditItem(): void {
         this.editListType = this.editListTypeEnum.none;
     }
 
@@ -151,7 +155,7 @@ export class ListItemsPage implements OnInit {
         setTimeout(() => this.itemLabelInputElt.setFocus(), 100);
     }
 
-    checkItem(item: ItemDTO) {
+    onCheckItem(item: ItemDTO) {
         item.value.checked = !item.value.checked;
         this.listService.updateItem(item, item.value)
             .subscribe(

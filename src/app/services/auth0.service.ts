@@ -18,10 +18,6 @@ export class Auth0Service {
 
     constructor(private router: Router,
                 public platform: Platform) {
-
-        console.log('Platform: ');
-        console.log(this.platform.platforms());
-
         if (this.platform.is('mobile')) {
             this.config = environment.auth_config_native;
         } else {
@@ -65,16 +61,7 @@ export class Auth0Service {
 
     async getIdToken() {
         const idToken = await (await this.getAuth0()).getIdTokenClaims();
-        console.log('token = ');
-        console.log(idToken.__raw);
         return idToken.__raw;
-    }
-
-    async getUser() {
-        const user = await (await this.getAuth0()).getUser();
-        console.log('user = ');
-        console.log(user);
-        return user;
     }
 
     async logout() {

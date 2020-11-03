@@ -102,7 +102,21 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
 
-    private onEditList(): void {
+    private async onSubmitEditList(){
+
+        const toastError = await this.toastCtrl.create({
+            message: '',
+            position: 'top',
+            header: 'ERROR',
+            duration: 5000,
+            buttons: [
+                 {
+                    text: 'Close',
+                    role: 'cancel',
+                    handler: () => {}
+                }
+            ]
+        });
 
         switch (this.editListType) {
             case this.editListTypeEnum.create: {
@@ -112,8 +126,11 @@ export class HomePage implements OnInit, OnDestroy {
                             this.getLists();
                         },
                         errMsg => {
-                            this.errMsg = errMsg;
-                            console.log('addlist ERROR: ' + errMsg);
+                            // this.errMsg = errMsg;
+                            // console.log('addlist ERROR: ' + errMsg);
+                            toastError.setAttribute('message', errMsg);
+                            toastError.present();
+
                         });
                 break;
             }

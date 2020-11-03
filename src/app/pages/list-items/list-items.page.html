@@ -14,7 +14,7 @@
 
     <ion-card *ngIf="editListType !== editListTypeEnum.none">
         <ion-card-content>
-            <form [formGroup]="itemDetailsForm" (ngSubmit)="onSubmitPropertyList()">
+            <form [formGroup]="itemDetailsForm" (ngSubmit)="onEditItem()">
 
                 <ion-item>
                     <ion-label position="floating">Label</ion-label>
@@ -44,7 +44,7 @@
                         <ion-col>
                             <ion-buttons>
                                 <ion-button fill="solid" type="submit" [disabled]="!itemDetailsForm.valid">OK</ion-button>
-                                <ion-button fill="solid" type="button" (click)="onCancelPropertyList()">Cancel</ion-button>
+                                <ion-button fill="solid" type="button" (click)="onCancelEditItem()">Cancel</ion-button>
                             </ion-buttons>
                         </ion-col>
                         <ion-col></ion-col>
@@ -67,11 +67,10 @@
         </div>
 
 
-
         <ion-list *ngIf="isMobileSize()">
             <ion-item-sliding *ngFor="let item of list.items" #sld_item>
                 <ion-item button >
-                   <ion-checkbox checked={{item.value.checked}} ></ion-checkbox>
+                    <ion-checkbox checked={{item.value.checked}} (click)="onCheckItem(item)"></ion-checkbox>
                     <ion-label class="ion-text-wrap" style="padding-left: 0.5em;">
                         <ion-text>
                             <h3>{{item.value.label}}</h3>
@@ -113,7 +112,7 @@
                             <ion-grid>
                                 <ion-row style="display: flex; align-items: center; justify-content: center;">
                                     <ion-col size="auto">
-                                        <ion-checkbox checked={{item.value.checked}} ></ion-checkbox>
+                                        <ion-checkbox checked={{item.value.checked}} (click)="onCheckItem(item)"></ion-checkbox>
                                     </ion-col>
                                     <ion-col>
                                         <ion-label class="ion-text-wrap" style="padding-left: 0.5em;">

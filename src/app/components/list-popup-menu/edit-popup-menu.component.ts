@@ -4,7 +4,7 @@ import {EditListType} from '../../dto/itemslist';
 
 
 @Component({
-    selector: 'app-list-popup-menu',
+    selector: 'app-edit-popup-menu',
     templateUrl: './edit-popup-menu.component.html',
     styleUrls: ['./edit-popup-menu.component.scss'],
 })

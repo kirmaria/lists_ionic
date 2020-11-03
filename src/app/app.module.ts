@@ -19,6 +19,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AuthInterceptor } from './services/auth.interceptor';
 
 import { ListPopupMenuComponentModule } from './components/list-popup-menu/list-popup-menu.module';
+import {HttpErrorInterceptor} from './services/httpError.interceptor';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { ListPopupMenuComponentModule } from './components/list-popup-menu/list-
         {provide: 'listTypeEnum', useValue: ListType},
         {provide: 'unitTypeEnum', useValue: UnitType},
         {provide: 'editListTypeEnum', useValue: EditListType},
-        {provide : HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+        {provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true}
     ],
     bootstrap: [AppComponent]
 })
