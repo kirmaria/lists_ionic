@@ -104,20 +104,6 @@ export class HomePage implements OnInit, OnDestroy {
 
     private async onSubmitEditList(){
 
-        const toastError = await this.toastCtrl.create({
-            message: '',
-            position: 'top',
-            header: 'ERROR',
-            duration: 5000,
-            buttons: [
-                 {
-                    text: 'Close',
-                    role: 'cancel',
-                    handler: () => {}
-                }
-            ]
-        });
-
         switch (this.editListType) {
             case this.editListTypeEnum.create: {
                 this.listService.addList(this.listDetailsForm.value)
@@ -126,11 +112,7 @@ export class HomePage implements OnInit, OnDestroy {
                             this.getLists();
                         },
                         errMsg => {
-                            // this.errMsg = errMsg;
-                            // console.log('addlist ERROR: ' + errMsg);
-                            toastError.setAttribute('message', errMsg);
-                            toastError.present();
-
+                            this.errMsg = errMsg;
                         });
                 break;
             }
@@ -142,7 +124,6 @@ export class HomePage implements OnInit, OnDestroy {
                         },
                         errMsg => {
                             this.errMsg = errMsg;
-                            console.log('updateList ERROR: ' + errMsg);
                         });
                 break;
             }
@@ -154,7 +135,6 @@ export class HomePage implements OnInit, OnDestroy {
                         },
                         errMsg => {
                             this.errMsg = errMsg;
-                            console.log('duplicateList ERROR: ' + errMsg);
                         });
                 break;
             }
@@ -239,7 +219,6 @@ export class HomePage implements OnInit, OnDestroy {
                                 },
                                 errMsg => {
                                     this.errMsg = errMsg;
-                                    console.log('removeList ERROR: ' + errMsg);
                                     loading.dismiss();
                                 });
                     }

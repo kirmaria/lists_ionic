@@ -96,7 +96,6 @@ export class ListItemsPage implements OnInit {
                         },
                         errMsg => {
                             this.errMsg = errMsg;
-                            console.log('addItem ERROR: ' + errMsg);
                         });
                 break;
             }
@@ -108,7 +107,6 @@ export class ListItemsPage implements OnInit {
                         },
                         errMsg => {
                             this.errMsg = errMsg;
-                            console.log('updateItem ERROR: ' + errMsg);
                         });
                 break;
             }
@@ -120,7 +118,6 @@ export class ListItemsPage implements OnInit {
                         },
                         errMsg => {
                             this.errMsg = errMsg;
-                            console.log('duplicateItem ERROR: ' + errMsg);
                         });
                 break;
             }
@@ -164,7 +161,6 @@ export class ListItemsPage implements OnInit {
                 },
                 errMsg => {
                     this.errMsg = errMsg;
-                    console.log('updateItem ERROR: ' + errMsg);
                 });
     }
 
@@ -203,7 +199,6 @@ export class ListItemsPage implements OnInit {
                                 },
                                 errMsg => {
                                     this.errMsg = errMsg;
-                                    console.log('removeItem ERROR: ' + errMsg);
                                     loading.dismiss();
                                 });
                     }

@@ -18,18 +18,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             .pipe(
                 catchError((error: HttpErrorResponse) => {
                     let errorMsg = '';
-                    let errCode = 200;
                     let headerMsg = '';
 
                     if (error.error instanceof ErrorEvent) {
-                        console.log('Client side error :');
                         errorMsg = `Error: ${error.error.message}`;
+                        console.error('Client side error :', errorMsg);
                     } else {
-                        console.log('Server side error :');
-                        errCode = error.status;
                         errorMsg = error.error.text;
+                        console.error('Server side error :', errorMsg);
 
-                        switch (errCode) {
+                        switch (error.status) {
                             case 0:
                                 headerMsg = 'CONNECTION ERROR';
                                 errorMsg = 'The service is temporarily not available. Please try again later.';
