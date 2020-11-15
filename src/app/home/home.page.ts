@@ -34,6 +34,8 @@ export class HomePage implements OnInit, OnDestroy {
     lists: ItemsListDTO[];
     errMsg: string;
 
+    public searchTerm: string;
+
     @ViewChild('listNameInput', {static: false}) listNameInputElt: IonInput;
     crtList: ItemsListDTO;
     editListType: EditListType;
@@ -59,6 +61,12 @@ export class HomePage implements OnInit, OnDestroy {
         this.editListType = this.editListTypeEnum.none;
         this.crtList = new ItemsListDTO();
         this.initListDetailsForm();
+
+        this.searchTerm = '';
+    }
+
+    setFilteredItems() {
+
     }
 
 
@@ -67,15 +75,7 @@ export class HomePage implements OnInit, OnDestroy {
     }
 
     login() {
-
-        // const toast = await this.toastCtrl.create({
-        //     message: this.platform.platforms().toString(),
-        //     duration: 5000
-        // });
-        // toast.present();
-
         this.authService.login();
-
     }
 
     logout() {
@@ -155,7 +155,7 @@ export class HomePage implements OnInit, OnDestroy {
     //
 
     getLists() {
-        this.listService.getLists()
+        this.listService.getLists(this.searchTerm)
             .subscribe(
                 lists => this.lists = lists,
                 errMsg => this.errMsg = errMsg);

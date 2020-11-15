@@ -24,9 +24,7 @@
             <ion-button  size="small" (click)="filterList()">
                 <ion-icon name="funnel-outline" slot="icon-only"></ion-icon>
             </ion-button>
-            <ion-button  size="small" (click)="findList()">
-                <ion-icon name="search-outline" slot="icon-only"></ion-icon>
-            </ion-button>
+            <ion-searchbar placeholder="list name" [(ngModel)]="searchTerm" (ionChange)="getLists()"></ion-searchbar>
         </ion-buttons>
     </ion-toolbar>
 </div>

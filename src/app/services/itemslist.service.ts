@@ -21,12 +21,15 @@ export class ItemsListService {
     /**
      * getLists
      * @desc get all lists
+     * @param namePattern : filter the search with this namePattern
      * @returns Observable<ItemsListDTO[]
      * @memberOf ItemsListService
      */
-    getLists(): Observable<ItemsListDTO[]> {
-        return this.http.get<ItemsListDTO[]>(API_ITEMS_LIST_URL);
+    getLists(namePattern): Observable<ItemsListDTO[]> {
+        const param = new HttpParams().set('namePattern', namePattern);
+        return this.http.get<ItemsListDTO[]>(API_ITEMS_LIST_URL,  {params: param});
     }
+
 
     /**
      * addList
